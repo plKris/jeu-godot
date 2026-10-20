@@ -22,13 +22,12 @@ func _on_button(pressed: bool) -> void:
 
 func _on_button_button_down() -> void:
 	arduino.send_led(true)
+
+func _on_button_button_up() -> void:
+	arduino.send_led(false)
 	
 func _on_disconnected() -> void:
 		$Label2.visible = true
 
 func _on_connected() -> void:
 		$Label2.visible = false
-
-
-func _on_button_button_up() -> void:
-	arduino.send_led(false)

@@ -34,3 +34,7 @@ func _on_arduino_disconnected():
 func _on_start_button_pressed() -> void:
 	fade_overlay.modulate.a = 1
 	get_tree().change_scene_to_file("res://Scenes/Game.tscn")
+
+func _on_start_button_3d_pressed() -> void:
+	fade_overlay.modulate.a = 1
+	get_tree().change_scene_to_file("res://Scenes/Monde.tscn")

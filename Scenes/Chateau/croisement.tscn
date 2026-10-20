@@ -1,0 +1,52 @@
+[gd_scene format=3 uid="uid://d2pwx61gc71ht"]
+
+[ext_resource type="MeshLibrary" uid="uid://r8aucrjqlqdk" path="res://dungeon_palette.tres" id="1_ph5d8"]
+[ext_resource type="Script" uid="uid://c4mfe3yoyavee" path="res://Scenes/Chateau/croisement.gd" id="1_qy1ji"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_65gt5"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_wgfif"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_odrt5"]
+
+[node name="Node3D" type="Node3D" unique_id=1953727959]
+script = ExtResource("1_qy1ji")
+
+[node name="GridMap" type="GridMap" parent="." unique_id=2057404273]
+mesh_library = ExtResource("1_ph5d8")
+data = {
+"cells": PackedInt32Array(0, 65533, 1441793, 65535, 65535, 1441796, 65535, 65533, 1441796, 1, 65533, 1441796, 1, 65535, 1441796, 0, 65531, 1441793, 2, 65531, 1441793, 4, 65531, 1441793, 6, 65531, 1441793, 65534, 65531, 1441793, 65532, 65531, 1441793, 65530, 65531, 1441793, 0, 65529, 1441793, 0, 65527, 1441793, 0, 65525, 1441793, 65535, 65532, 7, 1, 65532, 1048583, 1, 65530, 655367, 65535, 65530, 1441799, 3, 65532, 655364, 5, 65532, 655364, 7, 65532, 655364, 65533, 65532, 655364, 65531, 65532, 655364, 65529, 65532, 655364, 65533, 65530, 655364, 65531, 65530, 655364, 65529, 65530, 655364, 3, 65530, 655364, 5, 65530, 655364, 7, 65530, 655364, 65535, 65528, 1048580, 1, 65528, 1048580, 1, 65526, 1048580, 65535, 65526, 1048580, 65535, 65524, 1048580, 1, 65524, 1048580, 0, 65535, 1)
+}
+metadata/_editor_floor_ = Vector3(0, 0, 0)
+
+[node name="PorteFace" type="Area3D" parent="." unique_id=1219232639]
+transform = Transform3D(5, 0, 0, 0, 5, 0, 0, 0, 5, 1.1779041, 2.619965, -23.714586)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="PorteFace" unique_id=1141649133]
+shape = SubResource("BoxShape3D_65gt5")
+
+[node name="PorteDroite" type="Area3D" parent="." unique_id=1990068915]
+transform = Transform3D(5, 0, 0, 0, 5, 0, 0, 0, 5, 14.651045, 2.935614, -8.87444)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="PorteDroite" unique_id=2071983019]
+shape = SubResource("BoxShape3D_wgfif")
+
+[node name="PorteGauche" type="Area3D" parent="." unique_id=1521593761]
+transform = Transform3D(5, 0, 0, 0, 5, 0, 0, 0, 5, -14.231266, 0, -9.437488)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="PorteGauche" unique_id=115982169]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.49876007, 0.089016914)
+shape = SubResource("BoxShape3D_odrt5")
+
+[node name="MarkerFace" type="Marker3D" parent="." unique_id=60581055]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -24)
+
+[node name="MarkerDroite" type="Marker3D" parent="." unique_id=1574266142]
+transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, 14, 0, -10)
+
+[node name="MarkerGauche" type="Marker3D" parent="." unique_id=2065424867]
+transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, -14, 0, -8)
+
+[connection signal="body_entered" from="PorteFace" to="." method="_on_porte_face_body_entered"]
+[connection signal="body_entered" from="PorteDroite" to="." method="_on_porte_droite_body_entered"]
+[connection signal="body_entered" from="PorteGauche" to="." method="_on_porte_gauche_body_entered"]
