@@ -1,0 +1,12 @@
+[gd_scene format=3 uid="uid://6lt0kn58bb56"]
+
+[ext_resource type="PackedScene" uid="uid://c61phu7wyqyvv" path="res://Map3D/dungeon_assets/building/wall.glb" id="1_fb2s0"]
+[ext_resource type="Texture2D" uid="uid://d1pagsno1fgju" path="res://Map3D/dungeon_assets/dungeon_albedo.png" id="2_ljakb"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_ngg3u"]
+albedo_texture = ExtResource("2_ljakb")
+
+[node name="wall2" unique_id=1847347560 instance=ExtResource("1_fb2s0")]
+
+[node name="wall" parent="." index="0" unique_id=554174788]
+surface_material_override/0 = SubResource("StandardMaterial3D_ngg3u")

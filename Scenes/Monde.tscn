@@ -1,0 +1,35 @@
+[gd_scene format=3 uid="uid://3dialv0u1l3c"]
+
+[ext_resource type="MeshLibrary" uid="uid://r8aucrjqlqdk" path="res://dungeon_palette.tres" id="1_rgb1w"]
+[ext_resource type="PackedScene" uid="uid://dw1786bh850uf" path="res://Images and ressources/joueur.tscn" id="2_xv00n"]
+
+[sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_vxnbm"]
+sky_horizon_color = Color(0.66224277, 0.6717428, 0.6867428, 1)
+ground_horizon_color = Color(0.66224277, 0.6717428, 0.6867428, 1)
+
+[sub_resource type="Sky" id="Sky_voxc8"]
+sky_material = SubResource("ProceduralSkyMaterial_vxnbm")
+
+[sub_resource type="Environment" id="Environment_6ei55"]
+background_mode = 2
+sky = SubResource("Sky_voxc8")
+glow_enabled = true
+
+[node name="Node3D" type="Node3D" unique_id=894701363]
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="." unique_id=1064469514]
+environment = SubResource("Environment_6ei55")
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="." unique_id=356377489]
+transform = Transform3D(-0.8660254, -0.43301278, 0.25, 0, 0.49999997, 0.86602545, -0.50000006, 0.75, -0.43301266, 0, 1, 0)
+shadow_enabled = true
+
+[node name="GridMap" type="GridMap" parent="." unique_id=1578892853]
+mesh_library = ExtResource("1_rgb1w")
+data = {
+"cells": PackedInt32Array(1, 65535, 1, 0, 65535, 1441796, 0, 65533, 1441796, 1, 65533, 1441793, 1, 65531, 1441793, 2, 65535, 1441793, 2, 65533, 1441793, 2, 65531, 1441793, 3, 65535, 1441796, 3, 65533, 1441796, 3, 65531, 1441796, 0, 65531, 1441796)
+}
+metadata/_editor_floor_ = Vector3(0, 0, 0)
+
+[node name="Joueur" parent="." unique_id=1103533437 instance=ExtResource("2_xv00n")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3, 2, -1)
