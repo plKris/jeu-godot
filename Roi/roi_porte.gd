@@ -46,6 +46,16 @@ signal salut_termine
 ## Paramètre FMOD à étiquettes qui choisit le sol : valeur 0 = Pierre, 1 = Tapis.
 @export var parametre_surface := "Surface"
 
+@export_group("Sceptre Arduino (gyroscope)")
+## Pilote le roi avec l'inclinaison du sceptre (trame DIR: envoyée par l'Arduino).
+@export var utiliser_sceptre := true
+## Inverse avant/arrière si le sceptre est tenu dans l'autre sens.
+@export var inverser_avant_arriere := false
+## Inverse gauche/droite si le capteur est monté à l'envers.
+@export var inverser_gauche_droite := false
+## Le bouton du sceptre fait saluer le roi (lève le sceptre).
+@export var bouton_sceptre_salue := true
+
 ## Entrée fournie par un autre script ; remplace le clavier tant qu'elle n'est pas nulle.
 var entree_externe := Vector2.ZERO
 ## Vrai pendant que le cortège avance.
@@ -64,8 +74,27 @@ var _tween_salut: Tween
 var _palanquin_y := 0.0
 var _avertissement_pas := false
 
+var _arduino: Node  # l'autoload ArduinoManager, s'il existe
+
 func _ready() -> void:
 	_palanquin_y = _palanquin.position.y
+	_arduino = get_node_or_null("/root/ArduinoManager")
+	if _arduino and utiliser_sceptre:
+		_arduino.direction_changed.connect(_sur_direction_sceptre)
+		_arduino.button_changed.connect(_sur_bouton_sceptre)
+		_arduino.arduino_disconnected.connect(func(): entree_externe = Vector2.ZERO)
+
+## Inclinaison du sceptre → déplacement du roi (le clavier reste utilisable quand le sceptre est à plat).
+func _sur_direction_sceptre(dir: Vector2) -> void:
+	if inverser_gauche_droite:
+		dir.x = -dir.x
+	if inverser_avant_arriere:
+		dir.y = -dir.y
+	entree_externe = dir
+
+func _sur_bouton_sceptre(appuye: bool) -> void:
+	if appuye and bouton_sceptre_salue:
+		saluer()
 
 func _physics_process(delta: float) -> void:
 	_temps += delta

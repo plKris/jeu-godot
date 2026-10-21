@@ -94,11 +94,11 @@ size = Vector3(0.96, 0.07, 0.68)
 
 [sub_resource type="BoxMesh" id="BoxMesh_b1bcf"]
 material = SubResource("StandardMaterial3D_yin76")
-size = Vector3(1.25, 2.1, 0.14)
+size = Vector3(1.25, 1.6, 0.14)
 
 [sub_resource type="BoxMesh" id="BoxMesh_dh86j"]
 material = SubResource("StandardMaterial3D_h1bbc")
-size = Vector3(0.95, 1.75, 0.02)
+size = Vector3(0.95, 1.25, 0.02)
 
 [sub_resource type="BoxMesh" id="BoxMesh_fagv4"]
 material = SubResource("StandardMaterial3D_d6vhf")
@@ -213,19 +213,19 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.94, -0.18)
 mesh = SubResource("BoxMesh_ady7j")
 
 [node name="Dossier" type="MeshInstance3D" parent="Visuel/Palanquin/Trone" unique_id=183969258]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.955, -0.6)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.705, -0.6)
 mesh = SubResource("BoxMesh_b1bcf")
 
 [node name="DossierVelours" type="MeshInstance3D" parent="Visuel/Palanquin/Trone" unique_id=193966774]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.905, -0.525)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.655, -0.525)
 mesh = SubResource("BoxMesh_dh86j")
 
 [node name="Fronton" type="MeshInstance3D" parent="Visuel/Palanquin/Trone" unique_id=1516765914]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 4.055, -0.6)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3.555, -0.6)
 mesh = SubResource("BoxMesh_fagv4")
 
 [node name="Joyau" type="MeshInstance3D" parent="Visuel/Palanquin/Trone" unique_id=250920922]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 4.265, -0.6)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3.765, -0.6)
 mesh = SubResource("CylinderMesh_vmxed")
 
 [node name="AccoudoirGauche" type="MeshInstance3D" parent="Visuel/Palanquin/Trone" unique_id=1630975678]
@@ -241,7 +241,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.62, 2.035, -0.3)
 mesh = SubResource("BoxMesh_wec4h")
 
 [node name="BouleGauche" type="MeshInstance3D" parent="Visuel/Palanquin/Trone" unique_id=1119678499]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.62, 4.125, -0.6)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.62, 3.625, -0.6)
 mesh = SubResource("SphereMesh_tbp61")
 
 [node name="AccoudoirDroit" type="MeshInstance3D" parent="Visuel/Palanquin/Trone" unique_id=1284682895]
@@ -257,7 +257,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.62, 2.035, -0.3)
 mesh = SubResource("BoxMesh_aryit")
 
 [node name="BouleDroit" type="MeshInstance3D" parent="Visuel/Palanquin/Trone" unique_id=1239591369]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.62, 4.125, -0.6)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.62, 3.625, -0.6)
 mesh = SubResource("SphereMesh_gu7fq")
 
 [node name="Roi" parent="Visuel/Palanquin" unique_id=1821731819 instance=ExtResource("2_og6ot")]

@@ -10,6 +10,8 @@ signal button_changed(pressed: bool)
 signal sensor_changed(value: int)                 # trame "sensor:<0..1023>" (potentiomètre / capteur A0)
 signal encoder_changed(position: int, delta: int) # trame "enc:<position>" (encodeur rotatif, manette de Tom)
 signal message_received(key: String, value: String) # TOUTE trame "clé:valeur" reçue (pour vos propres capteurs)
+signal direction_changed(direction: Vector2)      # trame "DIR:<AVANT|ARRIERE|GAUCHE|DROITE|NEUTRE>,LDR:..,BTN:.." (sceptre gyroscope)
+signal light_changed(value: int)                  # valeur LDR (0..1023) de la même trame
 
 # ── Constantes de pairing ──────────────────────────────
 const DISCOVER_MSG  := "DISCOVER"
@@ -42,6 +44,10 @@ var _pairing_cooldown: float = 0.0
 var sensor_value: int = 0
 var encoder_position: int = 0
 var button_pressed: bool = false
+## Direction donnée par l'inclinaison du sceptre : x = droite(+1)/gauche(-1), y = arrière(+1)/avant(-1).
+## Même convention que RoiPorte.entree_externe. Vector2.ZERO = sceptre à plat (NEUTRE).
+var direction: Vector2 = Vector2.ZERO
+var light_value: int = 0
 var _debug: bool = OS.get_environment("ARDUINO_DEBUG") == "1"  # ARDUINO_DEBUG=1 : affiche le détail du pairing
 
 func _ready() -> void:
@@ -163,6 +169,10 @@ func _process(_delta: float) -> void:
 			if not serial.is_open() :
 				emit_signal("arduino_disconnected")
 				_paired = false
+				# Carte débranchée : le roi ne doit pas continuer à marcher tout seul
+				if direction != Vector2.ZERO:
+					direction = Vector2.ZERO
+					emit_signal("direction_changed", direction)
 
 	if not _paired:
 		if not _is_pairing and _pairing_cooldown <= 0.0:
@@ -201,6 +211,8 @@ func _parse_message(msg: String) -> void:
 			encoder_position = new_position
 			if delta != 0:
 				emit_signal("encoder_changed", encoder_position, delta)
+		"dir":
+			_parse_trame_sceptre(msg)
 		"pong":
 			print("[Arduino] Latence mesurée : ", Time.get_ticks_msec() - parts[1].to_int(), " ms")
 		"ack":
@@ -208,6 +220,43 @@ func _parse_message(msg: String) -> void:
 		_:
 			pass
 			#print("[Arduino] Message inconnu : ", msg)
+
+# Trame du sceptre : "DIR:AVANT,LDR:512,BTN:0" (plusieurs clé:valeur séparées par des virgules)
+func _parse_trame_sceptre(msg: String) -> void:
+	for morceau: String in msg.split(",", false):
+		var kv := morceau.split(":", false, 1)
+		if kv.size() < 2:
+			continue
+		var cle := kv[0].strip_edges().to_lower()
+		var val := kv[1].strip_edges()
+		match cle:
+			"dir":
+				var nouvelle := _direction_depuis_texte(val)
+				if nouvelle != direction:
+					direction = nouvelle
+					emit_signal("direction_changed", direction)
+			"ldr":
+				var l := val.to_int()
+				if l != light_value:
+					light_value = l
+					emit_signal("light_changed", light_value)
+			"btn":
+				var b := val == "1"
+				if b != button_pressed:
+					button_pressed = b
+					emit_signal("button_changed", button_pressed)
+
+## "AVANT", "GAUCHE", "AVANT_DROITE", "ARRIERE_GAUCHE"... -> Vector2 de longueur 1 (ou zéro si NEUTRE).
+## Les diagonales sont normalisées pour que le roi n'aille pas plus vite en biais.
+func _direction_depuis_texte(texte: String) -> Vector2:
+	var v := Vector2.ZERO
+	for partie: String in texte.to_upper().split("_", false):
+		match partie:
+			"AVANT":   v.y -= 1.0
+			"ARRIERE": v.y += 1.0
+			"GAUCHE":  v.x -= 1.0
+			"DROITE":  v.x += 1.0
+	return v.normalized()
 
 # ══ API PUBLIQUE ══════════════════════════════════════
 
