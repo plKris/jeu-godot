@@ -246,13 +246,17 @@ func _parse_trame_sceptre(msg: String) -> void:
 					button_pressed = b
 					emit_signal("button_changed", button_pressed)
 
+## "AVANT", "GAUCHE", "AVANT_DROITE", "ARRIERE_GAUCHE"... -> Vector2 de longueur 1 (ou zéro si NEUTRE).
+## Les diagonales sont normalisées pour que le roi n'aille pas plus vite en biais.
 func _direction_depuis_texte(texte: String) -> Vector2:
-	match texte.to_upper():
-		"AVANT":   return Vector2(0, -1)
-		"ARRIERE": return Vector2(0, 1)
-		"GAUCHE":  return Vector2(-1, 0)
-		"DROITE":  return Vector2(1, 0)
-		_:         return Vector2.ZERO
+	var v := Vector2.ZERO
+	for partie: String in texte.to_upper().split("_", false):
+		match partie:
+			"AVANT":   v.y -= 1.0
+			"ARRIERE": v.y += 1.0
+			"GAUCHE":  v.x -= 1.0
+			"DROITE":  v.x += 1.0
+	return v.normalized()
 
 # ══ API PUBLIQUE ══════════════════════════════════════
 
