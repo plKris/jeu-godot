@@ -1,0 +1,23 @@
+[gd_scene format=3 uid="uid://d2m1jhbypltd2"]
+
+[ext_resource type="Script" uid="uid://dimc61x0xptib" path="res://Roi/roimarche.gd" id="1_eq01w"]
+[ext_resource type="PackedScene" uid="uid://deam8cqmgk4yv" path="res://Roi/modeles/low_poly_roi/King.fbx" id="2_j3gss"]
+[ext_resource type="PackedScene" uid="uid://4rwqqfrtvfos" path="res://Roi/modeles/low_poly_roi/Regal_Scepter.fbx" id="3_8icvc"]
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_odrt5"]
+
+[node name="Roi" type="CharacterBody3D" unique_id=1355409886]
+script = ExtResource("1_eq01w")
+
+[node name="Modele" parent="." unique_id=540360404 instance=ExtResource("2_j3gss")]
+transform = Transform3D(1.5, 0, 0, 0, 1.5, 0, 0, 0, 1.5, 0, 0, 0)
+
+[node name="Sceptre" type="Node3D" parent="." unique_id=832200454]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.54603434, 0.7068736, 0.29094025)
+
+[node name="Modele" parent="Sceptre" unique_id=420454732 instance=ExtResource("3_8icvc")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.36267972, -2.2351742e-08)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="." unique_id=458864352]
+transform = Transform3D(1.5, 0, 0, 0, 1.5, 0, 0, 0, 1.5, 0, 1.5973434, 0)
+shape = SubResource("CapsuleShape3D_odrt5")

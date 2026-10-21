@@ -3,13 +3,13 @@
 importer="scene"
 importer_version=1
 type="PackedScene"
-uid="uid://bgk8f1nne22ep"
-path="res://.godot/imported/King.glb-512814aaa16c29f5e4c5d68347b19885.scn"
+uid="uid://cnm6nucbwiunu"
+path="res://.godot/imported/Little Man by Don Carson - 8KU4S7I0sL8.glb-fd85adb0c3eb62e033933c4ae1393b53.scn"
 
 [deps]
 
-source_file="res://Images and ressources/King.glb"
-dest_files=["res://.godot/imported/King.glb-512814aaa16c29f5e4c5d68347b19885.scn"]
+source_file="res://Images and ressources/Modeles/Little Man by Don Carson - 8KU4S7I0sL8.glb"
+dest_files=["res://.godot/imported/Little Man by Don Carson - 8KU4S7I0sL8.glb-fd85adb0c3eb62e033933c4ae1393b53.scn"]
 
 [params]
 

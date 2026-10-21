@@ -3,13 +3,13 @@
 importer="scene"
 importer_version=1
 type="PackedScene"
-uid="uid://cnm6nucbwiunu"
-path="res://.godot/imported/Little Man by Don Carson - 8KU4S7I0sL8.glb-db15404c0b7ed18205de966c94cf051c.scn"
+uid="uid://c83l4pn882hnc"
+path="res://.godot/imported/Adventurer.glb-af7d663c8c3307e7d0bc984efd54c40b.scn"
 
 [deps]
 
-source_file="res://Images and ressources/Little Man by Don Carson - 8KU4S7I0sL8.glb"
-dest_files=["res://.godot/imported/Little Man by Don Carson - 8KU4S7I0sL8.glb-db15404c0b7ed18205de966c94cf051c.scn"]
+source_file="res://Images and ressources/Modeles/Adventurer.glb"
+dest_files=["res://.godot/imported/Adventurer.glb-af7d663c8c3307e7d0bc984efd54c40b.scn"]
 
 [params]
 

@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://c666w0rslfkwy"
-path="res://.godot/imported/circuit_image.png-49d743a329f04f03f69493da2745afb0.ctex"
+uid="uid://vo5yy46nc1cr"
+path="res://.godot/imported/halfelin.svg-0b560fb5c4b1d6086ab2c7c6430aa324.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Images and ressources/circuit_image.png"
-dest_files=["res://.godot/imported/circuit_image.png-49d743a329f04f03f69493da2745afb0.ctex"]
+source_file="res://Images and ressources/Images/halfelin.svg"
+dest_files=["res://.godot/imported/halfelin.svg-0b560fb5c4b1d6086ab2c7c6430aa324.ctex"]
 
 [params]
 
@@ -38,3 +38,6 @@ process/hdr_as_srgb=false
 process/hdr_clamp_exposure=false
 process/size_limit=0
 detect_3d/compress_to=1
+svg/scale=1.0
+editor/scale_with_editor_scale=false
+editor/convert_colors_with_editor_theme=false

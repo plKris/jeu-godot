@@ -1,10 +1,10 @@
 [gd_scene format=3 uid="uid://d2s4spgyxrfo5"]
 
 [ext_resource type="Script" uid="uid://d4nrt4vfygycd" path="res://Scripts/game.gd" id="1_j5yw3"]
-[ext_resource type="Texture2D" uid="uid://c666w0rslfkwy" path="res://Images and ressources/circuit_image.png" id="2_kldst"]
-[ext_resource type="Texture2D" uid="uid://vo5yy46nc1cr" path="res://Images and ressources/halfelin.svg" id="3_kldst"]
+[ext_resource type="Texture2D" uid="uid://c666w0rslfkwy" path="res://Images and ressources/Images/circuit_image.png" id="2_kldst"]
+[ext_resource type="Texture2D" uid="uid://vo5yy46nc1cr" path="res://Images and ressources/Images/halfelin.svg" id="3_kldst"]
 [ext_resource type="Script" uid="uid://dq60vbchpk1at" path="res://Scenes/sprite_2d.gd" id="4_b2bpf"]
-[ext_resource type="Texture2D" uid="uid://bjqryho74gl6j" path="res://Images and ressources/icon.svg" id="6_2irst"]
+[ext_resource type="Texture2D" uid="uid://bjqryho74gl6j" path="res://Images and ressources/Images/icon.svg" id="6_2irst"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_odrt5"]
 

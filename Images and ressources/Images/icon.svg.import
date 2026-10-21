@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://vo5yy46nc1cr"
-path="res://.godot/imported/halfelin.svg-2b7ee22c34e10a8e6d2509d7d2c3727e.ctex"
+uid="uid://bjqryho74gl6j"
+path="res://.godot/imported/icon.svg-c5b3c28644aa13b90284124a42e5d174.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Images and ressources/halfelin.svg"
-dest_files=["res://.godot/imported/halfelin.svg-2b7ee22c34e10a8e6d2509d7d2c3727e.ctex"]
+source_file="res://Images and ressources/Images/icon.svg"
+dest_files=["res://.godot/imported/icon.svg-c5b3c28644aa13b90284124a42e5d174.ctex"]
 
 [params]
 

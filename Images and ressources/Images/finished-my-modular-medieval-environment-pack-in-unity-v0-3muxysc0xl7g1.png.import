@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://bjqryho74gl6j"
-path="res://.godot/imported/icon.svg-242ad8fc7dbfda9432f28a74f79e0d58.ctex"
+uid="uid://c01k5mg1o7g4j"
+path="res://.godot/imported/finished-my-modular-medieval-environment-pack-in-unity-v0-3muxysc0xl7g1.png-2c40963b450f2c22694960ab24300d33.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Images and ressources/icon.svg"
-dest_files=["res://.godot/imported/icon.svg-242ad8fc7dbfda9432f28a74f79e0d58.ctex"]
+source_file="res://Images and ressources/Images/finished-my-modular-medieval-environment-pack-in-unity-v0-3muxysc0xl7g1.png"
+dest_files=["res://.godot/imported/finished-my-modular-medieval-environment-pack-in-unity-v0-3muxysc0xl7g1.png-2c40963b450f2c22694960ab24300d33.ctex"]
 
 [params]
 
@@ -38,6 +38,3 @@ process/hdr_as_srgb=false
 process/hdr_clamp_exposure=false
 process/size_limit=0
 detect_3d/compress_to=1
-svg/scale=1.0
-editor/scale_with_editor_scale=false
-editor/convert_colors_with_editor_theme=false

@@ -1,6 +1,7 @@
 [gd_scene format=3 uid="uid://br46gtwnnou4l"]
 
 [ext_resource type="Script" uid="uid://dd3m42c4741s4" path="res://Scripts/start_screen.gd" id="1_og4jd"]
+[ext_resource type="Texture2D" uid="uid://c01k5mg1o7g4j" path="res://Images and ressources/Images/finished-my-modular-medieval-environment-pack-in-unity-v0-3muxysc0xl7g1.png" id="2_nt0jr"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_og4jd"]
 corner_radius_top_left = 50
@@ -14,9 +15,10 @@ script = ExtResource("1_og4jd")
 
 [node name="Control" type="CanvasLayer" parent="." unique_id=714779241]
 
-[node name="Background" type="ColorRect" parent="Control" unique_id=1639288048]
+[node name="Background" type="TextureRect" parent="Control" unique_id=642613662]
 offset_right = 1917.0
 offset_bottom = 1079.0
+texture = ExtResource("2_nt0jr")
 
 [node name="FadeOverlay" type="ColorRect" parent="Control" unique_id=1284048180]
 unique_name_in_owner = true
@@ -35,47 +37,42 @@ anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = -385.5
-offset_top = -301.11
-offset_right = 385.5
-offset_bottom = 182.89008
+offset_left = -396.5
+offset_top = -91.5
+offset_right = 396.5
+offset_bottom = 91.5
 grow_horizontal = 2
 grow_vertical = 2
 size_flags_vertical = 0
 theme_override_constants/separation = 112
 
-[node name="HBoxContainer" type="HBoxContainer" parent="Control/VBoxContainer" unique_id=219058421]
+[node name="PlayButton" type="Button" parent="Control/VBoxContainer" unique_id=1377406337]
+unique_name_in_owner = true
 layout_mode = 2
+theme_override_font_sizes/font_size = 128
+text = "Lancer le jeu"
+
+[node name="HBoxContainer" type="HBoxContainer" parent="Control" unique_id=219058421]
+offset_right = 811.0
+offset_bottom = 109.0
 size_flags_vertical = 4
 size_flags_stretch_ratio = 1.46
 theme_override_constants/separation = 20
 
-[node name="StatusLabel" type="Label" parent="Control/VBoxContainer/HBoxContainer" unique_id=22544246]
+[node name="StatusLabel" type="Label" parent="Control/HBoxContainer" unique_id=22544246]
 unique_name_in_owner = true
 layout_mode = 2
-theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_colors/font_color = Color(1, 1, 1, 1)
 theme_override_font_sizes/font_size = 79
 text = "Etat de l'arduino : "
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="StatusDot" type="Panel" parent="Control/VBoxContainer/HBoxContainer" unique_id=750463700]
+[node name="StatusDot" type="Panel" parent="Control/HBoxContainer" unique_id=750463700]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(100, 0)
 layout_mode = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_og4jd")
 
-[node name="StartButton" type="Button" parent="Control/VBoxContainer" unique_id=1252999707]
-unique_name_in_owner = true
-layout_mode = 2
-theme_override_font_sizes/font_size = 128
-text = "Tester les capteurs"
-
-[node name="StartButton2" type="Button" parent="Control/VBoxContainer" unique_id=1377406337]
-unique_name_in_owner = true
-layout_mode = 2
-theme_override_font_sizes/font_size = 128
-text = " Démarrer le jeu 3D"
-
-[connection signal="pressed" from="Control/VBoxContainer/StartButton" to="." method="_on_start_button_pressed"]
-[connection signal="pressed" from="Control/VBoxContainer/StartButton2" to="." method="_on_start_button_pressed"]
+[connection signal="pressed" from="Control/VBoxContainer/PlayButton" to="." method="_on_start_button_pressed"]
+[connection signal="pressed" from="Control/VBoxContainer/PlayButton" to="." method="_on_play_button_pressed"]

@@ -1,8 +1,9 @@
 [gd_scene format=4 uid="uid://c5vsk47tfvtou"]
 
 [ext_resource type="MeshLibrary" uid="uid://r8aucrjqlqdk" path="res://dungeon_palette.tres" id="1_6ter2"]
+[ext_resource type="Script" uid="uid://bhc7bym2d8o2p" path="res://Scenes/tronesalle.gd" id="1_ilvm2"]
 [ext_resource type="Texture2D" uid="uid://d1pagsno1fgju" path="res://Map3D/dungeon_assets/dungeon_albedo.png" id="2_a6uko"]
-[ext_resource type="Script" uid="uid://ckeesehawl5a" path="res://area_3d.gd" id="3_huu5t"]
+[ext_resource type="PackedScene" uid="uid://d2m1jhbypltd2" path="res://Roi/roimarche.tscn" id="4_bbbwa"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_qwayd"]
 albedo_color = Color(0.6, 0.07, 0.1, 1)
@@ -225,9 +226,14 @@ _surfaces = [{
 blend_shape_mode = 0
 shadow_mesh = SubResource("ArrayMesh_xvcrb")
 
+[sub_resource type="Environment" id="Environment_wgfif"]
+volumetric_fog_enabled = true
+volumetric_fog_density = 0.0
+
 [sub_resource type="BoxShape3D" id="BoxShape3D_odrt5"]
 
 [node name="Node3D" type="Node3D" unique_id=1873929971]
+script = ExtResource("1_ilvm2")
 
 [node name="GridMapSol" type="GridMap" parent="." unique_id=1620808053]
 mesh_library = ExtResource("1_6ter2")
@@ -342,11 +348,33 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.8200989, 0, 0)
 mesh = SubResource("ArrayMesh_nh4at")
 surface_material_override/0 = SubResource("StandardMaterial3D_o030b")
 
+[node name="Node3D" type="Node3D" parent="." unique_id=1953727959]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1, 0, -6.671)
+
+[node name="GridMap" type="GridMap" parent="Node3D" unique_id=2057404273]
+mesh_library = ExtResource("1_6ter2")
+data = {
+"cells": PackedInt32Array(0, 65533, 1441793, 65535, 65535, 1441796, 65535, 65533, 1441796, 1, 65533, 1441796, 1, 65535, 1441796, 0, 65531, 1441793, 2, 65531, 1441793, 4, 65531, 1441793, 6, 65531, 1441793, 65534, 65531, 1441793, 65532, 65531, 1441793, 65530, 65531, 1441793, 0, 65529, 1441793, 0, 65527, 1441793, 0, 65525, 1441793, 65535, 65532, 7, 1, 65532, 1048583, 1, 65530, 655367, 65535, 65530, 1441799, 3, 65532, 655364, 5, 65532, 655364, 7, 65532, 655364, 65533, 65532, 655364, 65531, 65532, 655364, 65529, 65532, 655364, 65533, 65530, 655364, 65531, 65530, 655364, 65529, 65530, 655364, 3, 65530, 655364, 5, 65530, 655364, 7, 65530, 655364, 65535, 65528, 1048580, 1, 65528, 1048580, 1, 65526, 1048580, 65535, 65526, 1048580, 65535, 65524, 1048580, 1, 65524, 1048580, 0, 65535, 1)
+}
+metadata/_editor_floor_ = Vector3(0, 0, 0)
+
+[node name="FogVolume" type="FogVolume" parent="Node3D" unique_id=1245102113]
+transform = Transform3D(2.9196873, 0, 0, 0, 2.4537735, 0, 0, 0, 1, 0.8539181, 2.5488977, -2.8790212)
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="Node3D/FogVolume" unique_id=914689179]
+environment = SubResource("Environment_wgfif")
+
 [node name="Area3D" type="Area3D" parent="." unique_id=1263208311]
-script = ExtResource("3_huu5t")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Area3D" unique_id=1574740993]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.58, -4.378)
 shape = SubResource("BoxShape3D_odrt5")
 
+[node name="Roi" parent="." unique_id=1355409886 instance=ExtResource("4_bbbwa")]
+transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, 0, 1.144584, 7.1981835)
+
+[node name="Camera3D" type="Camera3D" parent="." unique_id=1826500971]
+transform = Transform3D(1, 0, 1.7484555e-07, 0, 1, 0, -1.7484555e-07, 0, 1, -8.526513e-14, 3.3480582, 8.1772)
+
+[connection signal="body_entered" from="Area3D" to="." method="_on_area_3d_body_entered"]
 [connection signal="body_entered" from="Area3D" to="Area3D" method="_on_body_entered"]
