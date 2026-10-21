@@ -1,0 +1,16 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://Roi/roi.gd" id="1_mabhm"]
+[ext_resource type="PackedScene" path="res://Roi/modeles/low_poly_roi/King.fbx" id="2_j3gss"]
+[ext_resource type="PackedScene" path="res://Roi/modeles/low_poly_roi/Regal_Scepter.fbx" id="3_8icvc"]
+
+[node name="Roi" type="Node3D" unique_id=1821731819]
+script = ExtResource("1_mabhm")
+
+[node name="Modele" type="Node3D" parent="." unique_id=540360404 instance=ExtResource("2_j3gss")]
+transform = Transform3D(1.5, 0, 0, 0, 1.5, 0, 0, 0, 1.5, 0, 0, 0)
+
+[node name="Sceptre" type="Node3D" parent="." unique_id=832200454]
+
+[node name="Modele" type="Node3D" parent="Sceptre" unique_id=420454732 instance=ExtResource("3_8icvc")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.36267972, -2.2351742e-08)

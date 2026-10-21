@@ -1,0 +1,286 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://Roi/roi_porte.gd" id="1_86vfx"]
+[ext_resource type="PackedScene" path="res://Roi/roi.tscn" id="2_og6ot"]
+[ext_resource type="Script" path="res://Roi/roi.gd" id="3_f6sha"]
+[ext_resource type="PackedScene" path="res://Roi/chevalier_porteur.tscn" id="4_1d7vb"]
+[ext_resource type="Script" path="res://Roi/chevalier_porteur.gd" id="5_khlxf"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_pmb1j"]
+size = Vector3(2.6, 4, 3.9)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_yin76"]
+resource_name = "Bois"
+albedo_color = Color(0.42, 0.24, 0.12, 1)
+roughness = 0.7
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_5r5g6"]
+material = SubResource("StandardMaterial3D_yin76")
+top_radius = 0.045
+bottom_radius = 0.045
+height = 3.9
+radial_segments = 8
+rings = 1
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_d6vhf"]
+resource_name = "Or"
+albedo_color = Color(0.95, 0.72, 0.2, 1)
+metallic = 0.8
+roughness = 0.3
+
+[sub_resource type="SphereMesh" id="SphereMesh_qrqi5"]
+material = SubResource("StandardMaterial3D_d6vhf")
+radius = 0.065
+height = 0.13
+radial_segments = 8
+rings = 4
+
+[sub_resource type="SphereMesh" id="SphereMesh_7wkv6"]
+material = SubResource("StandardMaterial3D_d6vhf")
+radius = 0.065
+height = 0.13
+radial_segments = 8
+rings = 4
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_twces"]
+material = SubResource("StandardMaterial3D_yin76")
+top_radius = 0.045
+bottom_radius = 0.045
+height = 3.9
+radial_segments = 8
+rings = 1
+
+[sub_resource type="SphereMesh" id="SphereMesh_fa23e"]
+material = SubResource("StandardMaterial3D_d6vhf")
+radius = 0.065
+height = 0.13
+radial_segments = 8
+rings = 4
+
+[sub_resource type="SphereMesh" id="SphereMesh_ts6mm"]
+material = SubResource("StandardMaterial3D_d6vhf")
+radius = 0.065
+height = 0.13
+radial_segments = 8
+rings = 4
+
+[sub_resource type="BoxMesh" id="BoxMesh_pwahl"]
+material = SubResource("StandardMaterial3D_yin76")
+size = Vector3(1.45, 0.1, 1.5)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_en6nc"]
+resource_name = "BleuRoyal"
+albedo_color = Color(0.18, 0.3, 0.7, 1)
+roughness = 0.85
+
+[sub_resource type="BoxMesh" id="BoxMesh_1nu4a"]
+material = SubResource("StandardMaterial3D_en6nc")
+size = Vector3(1.49, 0.3, 1.54)
+
+[sub_resource type="BoxMesh" id="BoxMesh_ujvlr"]
+material = SubResource("StandardMaterial3D_d6vhf")
+size = Vector3(1.51, 0.05, 1.56)
+
+[sub_resource type="BoxMesh" id="BoxMesh_xxklc"]
+material = SubResource("StandardMaterial3D_yin76")
+size = Vector3(1.1, 0.4, 0.75)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_h1bbc"]
+resource_name = "Velours"
+albedo_color = Color(0.6, 0.08, 0.14, 1)
+roughness = 0.9
+
+[sub_resource type="BoxMesh" id="BoxMesh_ady7j"]
+material = SubResource("StandardMaterial3D_h1bbc")
+size = Vector3(0.96, 0.07, 0.68)
+
+[sub_resource type="BoxMesh" id="BoxMesh_b1bcf"]
+material = SubResource("StandardMaterial3D_yin76")
+size = Vector3(1.25, 2.1, 0.14)
+
+[sub_resource type="BoxMesh" id="BoxMesh_dh86j"]
+material = SubResource("StandardMaterial3D_h1bbc")
+size = Vector3(0.95, 1.75, 0.02)
+
+[sub_resource type="BoxMesh" id="BoxMesh_fagv4"]
+material = SubResource("StandardMaterial3D_d6vhf")
+size = Vector3(1.35, 0.1, 0.18)
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_vmxed"]
+material = SubResource("StandardMaterial3D_d6vhf")
+top_radius = 0.0
+bottom_radius = 0.13
+height = 0.32
+radial_segments = 4
+rings = 1
+
+[sub_resource type="BoxMesh" id="BoxMesh_shona"]
+material = SubResource("StandardMaterial3D_d6vhf")
+size = Vector3(0.12, 0.1, 0.72)
+
+[sub_resource type="BoxMesh" id="BoxMesh_tts3c"]
+material = SubResource("StandardMaterial3D_yin76")
+size = Vector3(0.09, 0.32, 0.09)
+
+[sub_resource type="BoxMesh" id="BoxMesh_wec4h"]
+material = SubResource("StandardMaterial3D_yin76")
+size = Vector3(0.1, 0.32, 0.6)
+
+[sub_resource type="SphereMesh" id="SphereMesh_tbp61"]
+material = SubResource("StandardMaterial3D_d6vhf")
+radius = 0.08
+height = 0.16
+radial_segments = 8
+rings = 4
+
+[sub_resource type="BoxMesh" id="BoxMesh_ea7u7"]
+material = SubResource("StandardMaterial3D_d6vhf")
+size = Vector3(0.12, 0.1, 0.72)
+
+[sub_resource type="BoxMesh" id="BoxMesh_cb57t"]
+material = SubResource("StandardMaterial3D_yin76")
+size = Vector3(0.09, 0.32, 0.09)
+
+[sub_resource type="BoxMesh" id="BoxMesh_aryit"]
+material = SubResource("StandardMaterial3D_yin76")
+size = Vector3(0.1, 0.32, 0.6)
+
+[sub_resource type="SphereMesh" id="SphereMesh_gu7fq"]
+material = SubResource("StandardMaterial3D_d6vhf")
+radius = 0.08
+height = 0.16
+radial_segments = 8
+rings = 4
+
+[node name="RoiPorte" type="CharacterBody3D" unique_id=1958739726]
+script = ExtResource("1_86vfx")
+
+[node name="Collision" type="CollisionShape3D" parent="." unique_id=1657364771]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2, 0)
+shape = SubResource("BoxShape3D_pmb1j")
+
+[node name="Visuel" type="Node3D" parent="." unique_id=549267538]
+
+[node name="Palanquin" type="Node3D" parent="Visuel" unique_id=28407507]
+
+[node name="Brancards" type="Node3D" parent="Visuel/Palanquin" unique_id=1944195513]
+
+[node name="BrancardGauche" type="MeshInstance3D" parent="Visuel/Palanquin/Brancards" unique_id=1125176660]
+transform = Transform3D(1, 0, 0, 0, -4.371139e-08, -1, 0, 1, -4.371139e-08, 0.62, 1.36, 0)
+mesh = SubResource("CylinderMesh_5r5g6")
+
+[node name="PommeauAvantGauche" type="MeshInstance3D" parent="Visuel/Palanquin/Brancards" unique_id=1822960392]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.62, 1.36, 1.95)
+mesh = SubResource("SphereMesh_qrqi5")
+
+[node name="PommeauArriereGauche" type="MeshInstance3D" parent="Visuel/Palanquin/Brancards" unique_id=70594111]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.62, 1.36, -1.95)
+mesh = SubResource("SphereMesh_7wkv6")
+
+[node name="BrancardDroit" type="MeshInstance3D" parent="Visuel/Palanquin/Brancards" unique_id=833884738]
+transform = Transform3D(1, 0, 0, 0, -4.371139e-08, -1, 0, 1, -4.371139e-08, -0.62, 1.36, 0)
+mesh = SubResource("CylinderMesh_twces")
+
+[node name="PommeauAvantDroit" type="MeshInstance3D" parent="Visuel/Palanquin/Brancards" unique_id=252630917]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.62, 1.36, 1.95)
+mesh = SubResource("SphereMesh_fa23e")
+
+[node name="PommeauArriereDroit" type="MeshInstance3D" parent="Visuel/Palanquin/Brancards" unique_id=502995125]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.62, 1.36, -1.95)
+mesh = SubResource("SphereMesh_ts6mm")
+
+[node name="Plateforme" type="Node3D" parent="Visuel/Palanquin" unique_id=756559333]
+
+[node name="Plancher" type="MeshInstance3D" parent="Visuel/Palanquin/Plateforme" unique_id=980490843]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.455, 0)
+mesh = SubResource("BoxMesh_pwahl")
+
+[node name="Draperie" type="MeshInstance3D" parent="Visuel/Palanquin/Plateforme" unique_id=210343165]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.285, 0)
+mesh = SubResource("BoxMesh_1nu4a")
+
+[node name="Galon" type="MeshInstance3D" parent="Visuel/Palanquin/Plateforme" unique_id=890783390]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.145, 0)
+mesh = SubResource("BoxMesh_ujvlr")
+
+[node name="Trone" type="Node3D" parent="Visuel/Palanquin" unique_id=1430710088]
+
+[node name="Siege" type="MeshInstance3D" parent="Visuel/Palanquin/Trone" unique_id=850866005]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.705, -0.18)
+mesh = SubResource("BoxMesh_xxklc")
+
+[node name="Coussin" type="MeshInstance3D" parent="Visuel/Palanquin/Trone" unique_id=777606791]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.94, -0.18)
+mesh = SubResource("BoxMesh_ady7j")
+
+[node name="Dossier" type="MeshInstance3D" parent="Visuel/Palanquin/Trone" unique_id=183969258]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.955, -0.6)
+mesh = SubResource("BoxMesh_b1bcf")
+
+[node name="DossierVelours" type="MeshInstance3D" parent="Visuel/Palanquin/Trone" unique_id=193966774]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.905, -0.525)
+mesh = SubResource("BoxMesh_dh86j")
+
+[node name="Fronton" type="MeshInstance3D" parent="Visuel/Palanquin/Trone" unique_id=1516765914]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 4.055, -0.6)
+mesh = SubResource("BoxMesh_fagv4")
+
+[node name="Joyau" type="MeshInstance3D" parent="Visuel/Palanquin/Trone" unique_id=250920922]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 4.265, -0.6)
+mesh = SubResource("CylinderMesh_vmxed")
+
+[node name="AccoudoirGauche" type="MeshInstance3D" parent="Visuel/Palanquin/Trone" unique_id=1630975678]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.62, 2.225, -0.2)
+mesh = SubResource("BoxMesh_shona")
+
+[node name="MontantGauche" type="MeshInstance3D" parent="Visuel/Palanquin/Trone" unique_id=166452654]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.62, 2.035, 0.12)
+mesh = SubResource("BoxMesh_tts3c")
+
+[node name="FlancGauche" type="MeshInstance3D" parent="Visuel/Palanquin/Trone" unique_id=770204294]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.62, 2.035, -0.3)
+mesh = SubResource("BoxMesh_wec4h")
+
+[node name="BouleGauche" type="MeshInstance3D" parent="Visuel/Palanquin/Trone" unique_id=1119678499]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.62, 4.125, -0.6)
+mesh = SubResource("SphereMesh_tbp61")
+
+[node name="AccoudoirDroit" type="MeshInstance3D" parent="Visuel/Palanquin/Trone" unique_id=1284682895]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.62, 2.225, -0.2)
+mesh = SubResource("BoxMesh_ea7u7")
+
+[node name="MontantDroit" type="MeshInstance3D" parent="Visuel/Palanquin/Trone" unique_id=1811914209]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.62, 2.035, 0.12)
+mesh = SubResource("BoxMesh_cb57t")
+
+[node name="FlancDroit" type="MeshInstance3D" parent="Visuel/Palanquin/Trone" unique_id=1094479727]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.62, 2.035, -0.3)
+mesh = SubResource("BoxMesh_aryit")
+
+[node name="BouleDroit" type="MeshInstance3D" parent="Visuel/Palanquin/Trone" unique_id=1239591369]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.62, 4.125, -0.6)
+mesh = SubResource("SphereMesh_gu7fq")
+
+[node name="Roi" type="Node3D" parent="Visuel/Palanquin" unique_id=1821731819 instance=ExtResource("2_og6ot")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.554, -0.12)
+script = ExtResource("3_f6sha")
+
+[node name="Gardes" type="Node3D" parent="Visuel" unique_id=1341886105]
+
+[node name="ChevalierAvantGauche" type="Node3D" parent="Visuel/Gardes" unique_id=1336046104 instance=ExtResource("4_1d7vb")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.92, 0, 1.55)
+script = ExtResource("5_khlxf")
+
+[node name="ChevalierAvantDroit" type="Node3D" parent="Visuel/Gardes" unique_id=30823922 instance=ExtResource("4_1d7vb")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.92, 0, 1.55)
+script = ExtResource("5_khlxf")
+bras_porteur = 0
+
+[node name="ChevalierArriereGauche" type="Node3D" parent="Visuel/Gardes" unique_id=2099241607 instance=ExtResource("4_1d7vb")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.92, 0, -1.55)
+script = ExtResource("5_khlxf")
+
+[node name="ChevalierArriereDroit" type="Node3D" parent="Visuel/Gardes" unique_id=1354159439 instance=ExtResource("4_1d7vb")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.92, 0, -1.55)
+script = ExtResource("5_khlxf")
+bras_porteur = 0

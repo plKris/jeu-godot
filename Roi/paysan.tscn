@@ -1,0 +1,17 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://Roi/paysan.gd" id="1_dfsaj"]
+[ext_resource type="PackedScene" path="res://Roi/paysan_modele.tscn" id="2_xbypm"]
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_a0vqk"]
+radius = 0.33
+height = 2.1
+
+[node name="Paysan" type="CharacterBody3D" unique_id=1828808328]
+script = ExtResource("1_dfsaj")
+
+[node name="Collision" type="CollisionShape3D" parent="." unique_id=764849695]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.05, 0)
+shape = SubResource("CapsuleShape3D_a0vqk")
+
+[node name="Modele" type="Node3D" parent="." unique_id=1964115538 instance=ExtResource("2_xbypm")]

@@ -1,0 +1,290 @@
+[gd_scene format=3 uid="uid://whphhrsxcphc"]
+
+[ext_resource type="Script" uid="uid://cogeix4wcs5a7" path="res://Roi/demo_roi.gd" id="1_vs8u8"]
+[ext_resource type="PackedScene" path="res://Roi/roi_porte.tscn" id="2_1oav7"]
+[ext_resource type="Script" uid="uid://dlmee4imtresq" path="res://Roi/camera_suivi.gd" id="4_u67be"]
+[ext_resource type="PackedScene" path="res://Roi/foule_paysans.tscn" id="5_xakxv"]
+
+[sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_qqdgs"]
+sky_top_color = Color(0.3, 0.5, 0.85, 1)
+sky_horizon_color = Color(0.7, 0.78, 0.88, 1)
+ground_bottom_color = Color(0.25, 0.3, 0.2, 1)
+ground_horizon_color = Color(0.7, 0.78, 0.88, 1)
+
+[sub_resource type="Sky" id="Sky_2kn3s"]
+sky_material = SubResource("ProceduralSkyMaterial_qqdgs")
+
+[sub_resource type="Environment" id="Environment_eek0s"]
+background_mode = 2
+sky = SubResource("Sky_2kn3s")
+ambient_light_source = 3
+tonemap_mode = 2
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_4viyu"]
+size = Vector3(60, 1, 60)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_pppu3"]
+albedo_color = Color(0.32, 0.5, 0.24, 1)
+roughness = 0.9
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_181px"]
+material = SubResource("StandardMaterial3D_pppu3")
+size = Vector2(60, 60)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_qwayd"]
+albedo_color = Color(0.6, 0.07, 0.1, 1)
+roughness = 0.9
+
+[sub_resource type="BoxMesh" id="BoxMesh_mofwn"]
+material = SubResource("StandardMaterial3D_qwayd")
+size = Vector3(3, 0.02, 24)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_5jgwj"]
+albedo_color = Color(0.62, 0.6, 0.56, 1)
+roughness = 0.9
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_2p7sh"]
+material = SubResource("StandardMaterial3D_5jgwj")
+top_radius = 0.45
+bottom_radius = 0.55
+height = 4.0
+radial_segments = 8
+
+[sub_resource type="CylinderShape3D" id="CylinderShape3D_wnuv5"]
+height = 4.0
+radius = 0.55
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_n8b7y"]
+albedo_color = Color(0.55, 0.38, 0.2, 1)
+roughness = 0.9
+
+[sub_resource type="BoxMesh" id="BoxMesh_ypt7a"]
+material = SubResource("StandardMaterial3D_n8b7y")
+size = Vector3(1.2, 1.2, 1.2)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_b7agb"]
+size = Vector3(1.2, 1.2, 1.2)
+
+[node name="DemoRoi" type="Node3D" unique_id=1414133196]
+script = ExtResource("1_vs8u8")
+
+[node name="Environnement" type="WorldEnvironment" parent="." unique_id=858672454]
+environment = SubResource("Environment_eek0s")
+
+[node name="Soleil" type="DirectionalLight3D" parent="." unique_id=99706919]
+transform = Transform3D(0.81915206, -0.46984634, 0.32898995, 0, 0.57357645, 0.81915206, -0.57357645, -0.6710101, 0.46984634, 0, 0, 0)
+shadow_enabled = true
+
+[node name="Sol" type="StaticBody3D" parent="." unique_id=2128715346]
+
+[node name="Collision" type="CollisionShape3D" parent="Sol" unique_id=1619757378]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.5, 0)
+shape = SubResource("BoxShape3D_4viyu")
+
+[node name="Herbe" type="MeshInstance3D" parent="Sol" unique_id=1458941127]
+mesh = SubResource("PlaneMesh_181px")
+
+[node name="TapisRouge" type="MeshInstance3D" parent="." unique_id=1168057446]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.01, -8)
+mesh = SubResource("BoxMesh_mofwn")
+
+[node name="Decor" type="Node3D" parent="." unique_id=1812563818]
+
+[node name="ColonneG0" type="StaticBody3D" parent="Decor" unique_id=743959475]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.2, 0, -2)
+
+[node name="Mesh" type="MeshInstance3D" parent="Decor/ColonneG0" unique_id=2088647045]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2, 0)
+mesh = SubResource("CylinderMesh_2p7sh")
+
+[node name="Collision" type="CollisionShape3D" parent="Decor/ColonneG0" unique_id=723378684]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2, 0)
+shape = SubResource("CylinderShape3D_wnuv5")
+
+[node name="ColonneD0" type="StaticBody3D" parent="Decor" unique_id=1302802531]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.2, 0, -2)
+
+[node name="Mesh" type="MeshInstance3D" parent="Decor/ColonneD0" unique_id=277127859]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2, 0)
+mesh = SubResource("CylinderMesh_2p7sh")
+
+[node name="Collision" type="CollisionShape3D" parent="Decor/ColonneD0" unique_id=1947900664]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2, 0)
+shape = SubResource("CylinderShape3D_wnuv5")
+
+[node name="ColonneG1" type="StaticBody3D" parent="Decor" unique_id=1440479581]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.2, 0, -6)
+
+[node name="Mesh" type="MeshInstance3D" parent="Decor/ColonneG1" unique_id=216720739]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2, 0)
+mesh = SubResource("CylinderMesh_2p7sh")
+
+[node name="Collision" type="CollisionShape3D" parent="Decor/ColonneG1" unique_id=1645321144]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2, 0)
+shape = SubResource("CylinderShape3D_wnuv5")
+
+[node name="ColonneD1" type="StaticBody3D" parent="Decor" unique_id=1978048264]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.2, 0, -6)
+
+[node name="Mesh" type="MeshInstance3D" parent="Decor/ColonneD1" unique_id=1404926569]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2, 0)
+mesh = SubResource("CylinderMesh_2p7sh")
+
+[node name="Collision" type="CollisionShape3D" parent="Decor/ColonneD1" unique_id=63271602]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2, 0)
+shape = SubResource("CylinderShape3D_wnuv5")
+
+[node name="ColonneG2" type="StaticBody3D" parent="Decor" unique_id=539365929]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.2, 0, -10)
+
+[node name="Mesh" type="MeshInstance3D" parent="Decor/ColonneG2" unique_id=18698989]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2, 0)
+mesh = SubResource("CylinderMesh_2p7sh")
+
+[node name="Collision" type="CollisionShape3D" parent="Decor/ColonneG2" unique_id=715743611]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2, 0)
+shape = SubResource("CylinderShape3D_wnuv5")
+
+[node name="ColonneD2" type="StaticBody3D" parent="Decor" unique_id=1969298855]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.2, 0, -10)
+
+[node name="Mesh" type="MeshInstance3D" parent="Decor/ColonneD2" unique_id=454784971]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2, 0)
+mesh = SubResource("CylinderMesh_2p7sh")
+
+[node name="Collision" type="CollisionShape3D" parent="Decor/ColonneD2" unique_id=1871375644]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2, 0)
+shape = SubResource("CylinderShape3D_wnuv5")
+
+[node name="ColonneG3" type="StaticBody3D" parent="Decor" unique_id=735797871]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.2, 0, -14)
+
+[node name="Mesh" type="MeshInstance3D" parent="Decor/ColonneG3" unique_id=754240320]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2, 0)
+mesh = SubResource("CylinderMesh_2p7sh")
+
+[node name="Collision" type="CollisionShape3D" parent="Decor/ColonneG3" unique_id=495583851]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2, 0)
+shape = SubResource("CylinderShape3D_wnuv5")
+
+[node name="ColonneD3" type="StaticBody3D" parent="Decor" unique_id=34152833]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.2, 0, -14)
+
+[node name="Mesh" type="MeshInstance3D" parent="Decor/ColonneD3" unique_id=1751622590]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2, 0)
+mesh = SubResource("CylinderMesh_2p7sh")
+
+[node name="Collision" type="CollisionShape3D" parent="Decor/ColonneD3" unique_id=2000106884]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2, 0)
+shape = SubResource("CylinderShape3D_wnuv5")
+
+[node name="ColonneG4" type="StaticBody3D" parent="Decor" unique_id=543712073]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.2, 0, -18)
+
+[node name="Mesh" type="MeshInstance3D" parent="Decor/ColonneG4" unique_id=1484883214]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2, 0)
+mesh = SubResource("CylinderMesh_2p7sh")
+
+[node name="Collision" type="CollisionShape3D" parent="Decor/ColonneG4" unique_id=506975630]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2, 0)
+shape = SubResource("CylinderShape3D_wnuv5")
+
+[node name="ColonneD4" type="StaticBody3D" parent="Decor" unique_id=1126894570]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.2, 0, -18)
+
+[node name="Mesh" type="MeshInstance3D" parent="Decor/ColonneD4" unique_id=1137823341]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2, 0)
+mesh = SubResource("CylinderMesh_2p7sh")
+
+[node name="Collision" type="CollisionShape3D" parent="Decor/ColonneD4" unique_id=7761721]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2, 0)
+shape = SubResource("CylinderShape3D_wnuv5")
+
+[node name="ColonneG5" type="StaticBody3D" parent="Decor" unique_id=1213825235]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.2, 0, -22)
+
+[node name="Mesh" type="MeshInstance3D" parent="Decor/ColonneG5" unique_id=1418551055]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2, 0)
+mesh = SubResource("CylinderMesh_2p7sh")
+
+[node name="Collision" type="CollisionShape3D" parent="Decor/ColonneG5" unique_id=1220614482]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2, 0)
+shape = SubResource("CylinderShape3D_wnuv5")
+
+[node name="ColonneD5" type="StaticBody3D" parent="Decor" unique_id=1768618487]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.2, 0, -22)
+
+[node name="Mesh" type="MeshInstance3D" parent="Decor/ColonneD5" unique_id=861398545]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2, 0)
+mesh = SubResource("CylinderMesh_2p7sh")
+
+[node name="Collision" type="CollisionShape3D" parent="Decor/ColonneD5" unique_id=2071674693]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2, 0)
+shape = SubResource("CylinderShape3D_wnuv5")
+
+[node name="Caisse12" type="StaticBody3D" parent="Decor" unique_id=1441996986]
+transform = Transform3D(0.5591929, 0, 0.82903755, 0, 1, 0, -0.82903755, 0, 0.5591929, 8, 0, 4)
+
+[node name="Mesh" type="MeshInstance3D" parent="Decor/Caisse12" unique_id=427439833]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.6, 0)
+mesh = SubResource("BoxMesh_ypt7a")
+
+[node name="Collision" type="CollisionShape3D" parent="Decor/Caisse12" unique_id=386060341]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.6, 0)
+shape = SubResource("BoxShape3D_b7agb")
+
+[node name="Caisse13" type="StaticBody3D" parent="Decor" unique_id=848209851]
+transform = Transform3D(0.39874908, 0, 0.9170601, 0, 1, 0, -0.9170601, 0, 0.39874908, 9.5, 0, 2.5)
+
+[node name="Mesh" type="MeshInstance3D" parent="Decor/Caisse13" unique_id=129803385]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.6, 0)
+mesh = SubResource("BoxMesh_ypt7a")
+
+[node name="Collision" type="CollisionShape3D" parent="Decor/Caisse13" unique_id=956670274]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.6, 0)
+shape = SubResource("BoxShape3D_b7agb")
+
+[node name="Caisse14" type="StaticBody3D" parent="Decor" unique_id=1135591423]
+transform = Transform3D(0.45399052, 0, -0.8910065, 0, 1, 0, 0.8910065, 0, 0.45399052, -9, 0, 6)
+
+[node name="Mesh" type="MeshInstance3D" parent="Decor/Caisse14" unique_id=1857472028]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.6, 0)
+mesh = SubResource("BoxMesh_ypt7a")
+
+[node name="Collision" type="CollisionShape3D" parent="Decor/Caisse14" unique_id=240937203]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.6, 0)
+shape = SubResource("BoxShape3D_b7agb")
+
+[node name="Caisse15" type="StaticBody3D" parent="Decor" unique_id=1103398142]
+transform = Transform3D(0.656059, 0, -0.75470954, 0, 1, 0, 0.75470954, 0, 0.656059, -7, 0, -6)
+
+[node name="Mesh" type="MeshInstance3D" parent="Decor/Caisse15" unique_id=578270646]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.6, 0)
+mesh = SubResource("BoxMesh_ypt7a")
+
+[node name="Collision" type="CollisionShape3D" parent="Decor/Caisse15" unique_id=2029433832]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.6, 0)
+shape = SubResource("BoxShape3D_b7agb")
+
+[node name="Caisse16" type="StaticBody3D" parent="Decor" unique_id=2057497709]
+transform = Transform3D(0.34202015, 0, 0.9396926, 0, 1, 0, -0.9396926, 0, 0.34202015, 10, 0, -10)
+
+[node name="Mesh" type="MeshInstance3D" parent="Decor/Caisse16" unique_id=56614294]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.6, 0)
+mesh = SubResource("BoxMesh_ypt7a")
+
+[node name="Collision" type="CollisionShape3D" parent="Decor/Caisse16" unique_id=1976556088]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.6, 0)
+shape = SubResource("BoxShape3D_b7agb")
+
+[node name="RoiPorte" parent="." unique_id=1958739726 instance=ExtResource("2_1oav7")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 4)
+
+[node name="Camera" type="Camera3D" parent="." unique_id=1104225825 node_paths=PackedStringArray("cible")]
+transform = Transform3D(1, 0, 0, 0, 0.8872168, 0.46135277, 0, -0.46135277, 0.8872168, 0, 5.5, 11.5)
+script = ExtResource("4_u67be")
+cible = NodePath("../RoiPorte")
+
+[node name="FoulePaysans" parent="." unique_id=965160667 node_paths=PackedStringArray("cible") instance=ExtResource("5_xakxv")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -24)
+cible = NodePath("../RoiPorte")
