@@ -1,10 +1,8 @@
-[gd_scene format=3]
+[gd_scene format=3 uid="uid://0nh48ijfugmx"]
 
-[ext_resource type="Script" path="res://Roi/roi_porte.gd" id="1_86vfx"]
+[ext_resource type="Script" uid="uid://c8lq7hiw8jemb" path="res://Roi/roi_porte.gd" id="1_86vfx"]
 [ext_resource type="PackedScene" path="res://Roi/roi.tscn" id="2_og6ot"]
-[ext_resource type="Script" path="res://Roi/roi.gd" id="3_f6sha"]
 [ext_resource type="PackedScene" path="res://Roi/chevalier_porteur.tscn" id="4_1d7vb"]
-[ext_resource type="Script" path="res://Roi/chevalier_porteur.gd" id="5_khlxf"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_pmb1j"]
 size = Vector3(2.6, 4, 3.9)
@@ -160,6 +158,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2, 0)
 shape = SubResource("BoxShape3D_pmb1j")
 
 [node name="Visuel" type="Node3D" parent="." unique_id=549267538]
+transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, 0, 0, 0)
 
 [node name="Palanquin" type="Node3D" parent="Visuel" unique_id=28407507]
 
@@ -261,26 +260,24 @@ mesh = SubResource("BoxMesh_aryit")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.62, 4.125, -0.6)
 mesh = SubResource("SphereMesh_gu7fq")
 
-[node name="Roi" type="Node3D" parent="Visuel/Palanquin" unique_id=1821731819 instance=ExtResource("2_og6ot")]
+[node name="Roi" parent="Visuel/Palanquin" unique_id=1821731819 instance=ExtResource("2_og6ot")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.554, -0.12)
-script = ExtResource("3_f6sha")
 
 [node name="Gardes" type="Node3D" parent="Visuel" unique_id=1341886105]
 
-[node name="ChevalierAvantGauche" type="Node3D" parent="Visuel/Gardes" unique_id=1336046104 instance=ExtResource("4_1d7vb")]
+[node name="ChevalierAvantGauche" parent="Visuel/Gardes" unique_id=1336046104 instance=ExtResource("4_1d7vb")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.92, 0, 1.55)
-script = ExtResource("5_khlxf")
 
-[node name="ChevalierAvantDroit" type="Node3D" parent="Visuel/Gardes" unique_id=30823922 instance=ExtResource("4_1d7vb")]
+[node name="ChevalierAvantDroit" parent="Visuel/Gardes" unique_id=30823922 instance=ExtResource("4_1d7vb")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.92, 0, 1.55)
-script = ExtResource("5_khlxf")
 bras_porteur = 0
 
-[node name="ChevalierArriereGauche" type="Node3D" parent="Visuel/Gardes" unique_id=2099241607 instance=ExtResource("4_1d7vb")]
+[node name="ChevalierArriereGauche" parent="Visuel/Gardes" unique_id=2099241607 instance=ExtResource("4_1d7vb")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.92, 0, -1.55)
-script = ExtResource("5_khlxf")
 
-[node name="ChevalierArriereDroit" type="Node3D" parent="Visuel/Gardes" unique_id=1354159439 instance=ExtResource("4_1d7vb")]
+[node name="ChevalierArriereDroit" parent="Visuel/Gardes" unique_id=1354159439 instance=ExtResource("4_1d7vb")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.92, 0, -1.55)
-script = ExtResource("5_khlxf")
 bras_porteur = 0
+
+[node name="Camera3D" type="Camera3D" parent="." unique_id=833436522]
+transform = Transform3D(1, 0, 0, 0, 0.70710677, 0.7071068, 0, -0.7071068, 0.70710677, 0, 5, 3)

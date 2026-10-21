@@ -10,15 +10,15 @@ func _ready():
 	bonne_porte = randi_range(1, 3)
 
 func _on_porte_gauche_body_entered(body):
-	if body.name == "CharacterBody3D":
+	if body.name == "RoiPorte":
 		verifier_choix(1, $MarkerGauche)
 
 func _on_porte_face_body_entered(body):
-	if body.name == "CharacterBody3D":
+	if body.name == "RoiPorte":
 		verifier_choix(2, $MarkerFace) # Vérifie bien le nom de ton marqueur ici !
 
 func _on_porte_droite_body_entered(body):
-	if body.name == "CharacterBody3D":
+	if body.name == "RoiPorte":
 		verifier_choix(3, $MarkerDroite)
 
 func verifier_choix(porte_choisie, marqueur):

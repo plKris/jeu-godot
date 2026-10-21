@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://3dialv0u1l3c"]
 
-[ext_resource type="PackedScene" uid="uid://dw1786bh850uf" path="res://Images and ressources/joueur.tscn" id="2_xv00n"]
+[ext_resource type="PackedScene" uid="uid://0nh48ijfugmx" path="res://Roi/roi_porte.tscn" id="2_rgb1w"]
 [ext_resource type="PackedScene" uid="uid://d2pwx61gc71ht" path="res://Scenes/Chateau/croisement.tscn" id="3_xv00n"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_vxnbm"]
@@ -14,6 +14,7 @@ sky_material = SubResource("ProceduralSkyMaterial_vxnbm")
 background_mode = 2
 sky = SubResource("Sky_voxc8")
 glow_enabled = true
+fog_sky_affect = 0.0
 
 [node name="Node3D" type="Node3D" unique_id=894701363]
 
@@ -30,7 +31,7 @@ data = {
 }
 metadata/_editor_floor_ = Vector3(0, 0, 0)
 
-[node name="Joueur" parent="." unique_id=1103533437 instance=ExtResource("2_xv00n")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.85535, 0)
-
 [node name="Node3D" parent="." unique_id=1953727959 instance=ExtResource("3_xv00n")]
+
+[node name="RoiPorte" parent="." unique_id=1958739726 instance=ExtResource("2_rgb1w")]
+transform = Transform3D(0.5, 0, 0, 0, 0.5, 0, 0, 0, 0.5, 1, 1, 0)
