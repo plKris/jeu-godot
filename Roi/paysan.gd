@@ -14,6 +14,8 @@ enum Etat { COLERE, COURSE }
 @export var vitesse := 2.0
 @export var distance_arret := 2.6
 @export var espace_personnel := 1.05
+## Tant qu'il touche la cible, le paysan renvoie joueur_atteint toutes les N secondes.
+@export var intervalle_attaque := 1.0
 
 @export_group("Animation")
 @export var tempo := 1.0
@@ -36,6 +38,16 @@ var _decalage := 0.0
 var _variation := 1.0
 var _delai := 0.0
 var _a_atteint := false
+var _recharge_attaque := 0.0
+
+## Zone (boîte dans le repère de `repere_zone`) dont le paysan ne sort jamais :
+## sert à garder les paysans dans leur couloir. Sans repère, le paysan va partout.
+var repere_zone: Node3D
+var zone := AABB()
+
+func limiter_a(repere: Node3D, boite: AABB) -> void:
+	repere_zone = repere
+	zone = boite
 
 func _ready() -> void:
 	add_to_group("paysans")
@@ -72,12 +84,20 @@ func _physics_process(delta: float) -> void:
 			var vers := cible.global_position - global_position
 			vers.y = 0.0
 			regard = vers
-			if vers.length() > distance_arret:
-				dir = vers.normalized()
+			# Point visé : la cible, ou le bord de la zone le plus proche si la cible en est sortie.
+			var vers_but := _dans_zone(cible.global_position) - global_position
+			vers_but.y = 0.0
+			if vers.length() <= distance_arret:
+				# Tant que le paysan est collé au roi, il « frappe » toutes les intervalle_attaque secondes.
+				_recharge_attaque -= delta
+				if not _a_atteint or _recharge_attaque <= 0.0:
+					_a_atteint = true
+					_recharge_attaque = intervalle_attaque
+					joueur_atteint.emit(self)
+			else:
 				_a_atteint = false
-			elif not _a_atteint:
-				_a_atteint = true
-				joueur_atteint.emit(self)
+				if vers_but.length() > 0.3:
+					dir = vers_but.normalized()
 		else:
 			dir = direction_course.normalized()
 			regard = dir
@@ -96,6 +116,10 @@ func _physics_process(delta: float) -> void:
 	if not is_on_floor():
 		velocity += get_gravity() * delta
 	move_and_slide()
+	if repere_zone:
+		var p := _dans_zone(global_position)
+		global_position.x = p.x
+		global_position.z = p.z
 
 	if regard.length() > 0.1:
 		_modele.rotation.y = lerp_angle(_modele.rotation.y, atan2(regard.x, regard.z), 1.0 - exp(-8.0 * delta))
@@ -103,6 +127,17 @@ func _physics_process(delta: float) -> void:
 	_course = lerpf(_course, clampf(v_sol / vitesse, 0.0, 1.0), 1.0 - exp(-6.0 * delta))
 	_phase = fmod(_phase + v_sol * 2.7 * delta, TAU)
 	_animer()
+
+## Ramène un point global dans la zone autorisée (inchangé s'il n'y a pas de zone).
+func _dans_zone(p: Vector3) -> Vector3:
+	if repere_zone == null or not is_instance_valid(repere_zone):
+		return p
+	var l := repere_zone.to_local(p)
+	l.x = clampf(l.x, zone.position.x, zone.end.x)
+	l.z = clampf(l.z, zone.position.z, zone.end.z)
+	var g := repere_zone.to_global(l)
+	g.y = p.y
+	return g
 
 func _separation() -> Vector3:
 	var pousse := Vector3.ZERO

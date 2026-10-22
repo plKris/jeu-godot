@@ -4,6 +4,7 @@
 [ext_resource type="Script" uid="uid://bhc7bym2d8o2p" path="res://Scenes/tronesalle.gd" id="1_ilvm2"]
 [ext_resource type="Texture2D" uid="uid://d1pagsno1fgju" path="res://Map3D/dungeon_assets/dungeon_albedo.png" id="2_a6uko"]
 [ext_resource type="PackedScene" uid="uid://d2m1jhbypltd2" path="res://Roi/roimarche.tscn" id="4_bbbwa"]
+[ext_resource type="Script" path="res://Roi/camera_suivi.gd" id="5_camsuivi"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_qwayd"]
 albedo_color = Color(0.6, 0.07, 0.1, 1)
@@ -373,8 +374,12 @@ shape = SubResource("BoxShape3D_odrt5")
 [node name="Roi" parent="." unique_id=1355409886 instance=ExtResource("4_bbbwa")]
 transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, 0, 1.144584, 7.1981835)
 
-[node name="Camera3D" type="Camera3D" parent="." unique_id=1826500971]
+[node name="Camera3D" type="Camera3D" parent="." unique_id=1826500971 node_paths=PackedStringArray("cible")]
 transform = Transform3D(1, 0, 1.7484555e-07, 0, 1, 0, -1.7484555e-07, 0, 1, -8.526513e-14, 3.3480582, 8.1772)
+script = ExtResource("5_camsuivi")
+cible = NodePath("../Roi")
+decalage = Vector3(2.2, 3.0, 2.6)
+hauteur_visee = 1.0
+
 
 [connection signal="body_entered" from="Area3D" to="." method="_on_area_3d_body_entered"]
-[connection signal="body_entered" from="Area3D" to="Area3D" method="_on_body_entered"]

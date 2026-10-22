@@ -15,7 +15,7 @@ General/banks_path="res://FMOD Banks/Desktop"
 [application]
 
 config/name="TestCommunicationArduinoForStudents"
-run/main_scene="uid://br46gtwnnou4l"
+run/main_scene="res://Menu/menu_principal.tscn"
 config/features=PackedStringArray("4.7", "Forward Plus")
 config/icon="res://Images and ressources/Images/icon.svg"
 
@@ -23,6 +23,7 @@ config/icon="res://Images and ressources/Images/icon.svg"
 
 FmodManager="*uid://cds10pm7hwn3p"
 ArduinoManager="*uid://d0vdfj6uvp4dg"
+Partie="*res://Scripts/partie.gd"
 
 [display]
 

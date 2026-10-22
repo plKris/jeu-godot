@@ -74,5 +74,4 @@ custom_minimum_size = Vector2(100, 0)
 layout_mode = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_og4jd")
 
-[connection signal="pressed" from="Control/VBoxContainer/PlayButton" to="." method="_on_start_button_pressed"]
 [connection signal="pressed" from="Control/VBoxContainer/PlayButton" to="." method="_on_play_button_pressed"]

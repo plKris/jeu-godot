@@ -1,0 +1,130 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://Scripts/hud.gd" id="0_hud"]
+[ext_resource type="Theme" path="res://Menu/theme_chateau.tres" id="1_fccik"]
+[ext_resource type="Script" path="res://Scripts/coeurs.gd" id="2_bjfho"]
+
+[node name="HUD" type="CanvasLayer" unique_id=99712823]
+script = ExtResource("0_hud")
+layer = 10
+
+[node name="Racine" type="Control" parent="." unique_id=734048940]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+mouse_filter = 2
+theme = ExtResource("1_fccik")
+
+[node name="Flash" type="ColorRect" parent="Racine" unique_id=1396705733]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+mouse_filter = 2
+color = Color(0.7, 0, 0, 0)
+
+[node name="Haut" type="MarginContainer" parent="Racine" unique_id=599342910]
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
+offset_bottom = 110.0
+mouse_filter = 2
+theme_override_constants/margin_left = 32
+theme_override_constants/margin_top = 32
+theme_override_constants/margin_right = 32
+
+[node name="Ligne" type="HBoxContainer" parent="Racine/Haut" unique_id=849730233]
+layout_mode = 2
+mouse_filter = 2
+
+[node name="Coeurs" type="Control" parent="Racine/Haut/Ligne" unique_id=1989047389]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(204, 54)
+layout_mode = 2
+mouse_filter = 2
+script = ExtResource("2_bjfho")
+
+[node name="Espace" type="Control" parent="Racine/Haut/Ligne" unique_id=524734723]
+layout_mode = 2
+size_flags_horizontal = 3
+mouse_filter = 2
+
+[node name="Progression" type="Label" parent="Racine/Haut/Ligne" unique_id=914764895]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_font_sizes/font_size = 44
+text = "Croisement 1 / 5"
+
+[node name="Message" type="Label" parent="Racine" unique_id=1102533469]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
+offset_top = 170.0
+offset_bottom = 290.0
+theme_override_font_sizes/font_size = 64
+theme_override_constants/outline_size = 14
+text = "Message"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Panneau" type="ColorRect" parent="Racine" unique_id=2095349712]
+unique_name_in_owner = true
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+color = Color(0.04, 0.02, 0.01, 0.72)
+
+[node name="Centre" type="CenterContainer" parent="Racine/Panneau" unique_id=1152590373]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+
+[node name="Boite" type="VBoxContainer" parent="Racine/Panneau/Centre" unique_id=1174871452]
+layout_mode = 2
+theme_override_constants/separation = 28
+
+[node name="Titre" type="Label" parent="Racine/Panneau/Centre/Boite" unique_id=1114477682]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_font_sizes/font_size = 96
+theme_override_colors/font_color = Color(1, 0.84, 0.42, 1)
+theme_override_constants/outline_size = 16
+text = "Titre"
+horizontal_alignment = 1
+
+[node name="SousTitre" type="Label" parent="Racine/Panneau/Centre/Boite" unique_id=1752017887]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Sous-titre"
+horizontal_alignment = 1
+
+[node name="Marge" type="Control" parent="Racine/Panneau/Centre/Boite" unique_id=505240535]
+custom_minimum_size = Vector2(0, 20)
+layout_mode = 2
+
+[node name="BoutonReprendre" type="Button" parent="Racine/Panneau/Centre/Boite" unique_id=1845851458]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(460, 100)
+layout_mode = 2
+size_flags_horizontal = 4
+text = "Reprendre"
+
+[node name="BoutonRejouer" type="Button" parent="Racine/Panneau/Centre/Boite" unique_id=981418588]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(460, 100)
+layout_mode = 2
+size_flags_horizontal = 4
+text = "Rejouer"
+
+[node name="BoutonMenu" type="Button" parent="Racine/Panneau/Centre/Boite" unique_id=794678641]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(460, 100)
+layout_mode = 2
+size_flags_horizontal = 4
+text = "Menu principal"

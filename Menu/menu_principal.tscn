@@ -110,6 +110,7 @@ grow_horizontal = 2
 grow_vertical = 2
 theme = SubResource("Theme_menu")
 script = ExtResource("1_menu")
+scene_jeu = "res://Scenes/intro.tscn"
 
 [node name="Fond" type="TextureRect" parent="."]
 layout_mode = 1
@@ -157,6 +158,28 @@ unique_name_in_owner = true
 custom_minimum_size = Vector2(460, 115)
 layout_mode = 2
 text = "Quitter"
+
+[node name="EtatSceptre" type="Label" parent="."]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -760.0
+offset_top = -90.0
+offset_right = -40.0
+offset_bottom = -30.0
+grow_horizontal = 0
+grow_vertical = 0
+theme_override_colors/font_color = Color(0.98, 0.93, 0.8, 1)
+theme_override_colors/font_outline_color = Color(0.12, 0.06, 0.02, 1)
+theme_override_constants/outline_size = 8
+theme_override_font_sizes/font_size = 32
+text = "Sceptre : non connecté (clavier)"
+horizontal_alignment = 2
+vertical_alignment = 1
 
 [node name="Voile" type="ColorRect" parent="."]
 layout_mode = 1

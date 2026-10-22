@@ -1,3 +1,31 @@
+# La fuite du roi (jeu)
+
+Le peuple s'est soulevé : on incarne le roi, porté sur son palanquin, qui fuit à travers les couloirs du château. À chaque croisement, **trois couloirs** (gauche, face, droite) : un seul est le bon.
+- **Mauvais couloir** : des paysans surgissent de derrière le brouillard et chargent. Le roi perd **une vie** et doit faire demi-tour. Les paysans **restent dans leur couloir** (ils s'arrêtent à l'entrée et attendent). S'ils attrapent le roi, il perd encore une vie.
+- **Bon couloir** : le croisement suivant se construit au bout. Après le dernier, la lumière du jour indique la sortie : **victoire**.
+- **0 vie** : le roi est capturé, écran de défaite (Rejouer / Menu principal).
+
+**Commandes** : flèches ou ZQSD (ou inclinaison du sceptre Arduino) pour avancer, **Maj** pour courir, **Espace** (ou bouton du sceptre) pour saluer, **Échap** pour la pause.
+
+**Enchaînement des scènes** : `Menu/menu_principal.tscn` (scène principale) → `Scenes/intro.tscn` → `Scenes/tronesalle.tscn` (le roi sort par la porte) → `Scenes/Monde.tscn` (le labyrinthe). `Scenes/Start.tscn` (écran de test Arduino) existe toujours mais n'est plus la scène de départ.
+
+**Où régler quoi** :
+| Fichier | Rôle | Réglages utiles |
+|---|---|---|
+| `Scripts/partie.gd` (autoload `Partie`) | vies, progression, victoire/défaite | `vies_max` (3), `objectif` (5 croisements), `duree_invincibilite` |
+| `Scenes/Chateau/croisement.gd` | tirage du bon couloir, paysans, croisement suivant | `nb_paysans`, `vitesse_paysans`, `afficher_solution` (affiche le bon couloir dans la console) |
+| `Roi/paysan.gd` | un paysan (course, zone autorisée) | `vitesse`, `distance_arret`, `intervalle_attaque` |
+| `Scenes/hud.tscn` + `Scripts/hud.gd` | cœurs, « Croisement x / y », messages, pause, fin de partie | thème : `Menu/theme_chateau.tres` |
+| `Scripts/monde.gd` | lance la partie, bloque le roi à la fin, secoue la caméra | caméra : nœud `CameraSuivi` de `Monde.tscn` |
+
+**Test automatique** (le roi est piloté par code : mauvais couloir, demi-tour, bon couloir, victoire, puis défaite) :
+```
+godot --headless --path . res://tests/test_jeu_headless.tscn
+```
+Attendu : une série de `[TEST] OK` puis `[TEST] BILAN ok=true`.
+
+---
+
 # Test de connexion Arduino ↔ Godot (hackathon Le Rebours, 19–23 octobre 2026)
 
 **Ce n'est pas le jeu de départ.** C'est un **mini-projet de test** à ouvrir en cinq minutes, avant le vrai projet de base ([`Godot_Blocks`](https://github.com/liaroc/Godot_Blocks), branche `hackathon-oct-2026`), pour vérifier que :

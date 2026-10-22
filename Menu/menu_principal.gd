@@ -2,8 +2,8 @@ class_name MenuPrincipal
 extends Control
 
 ## Menu principal : fond château, musique du lobby, boutons Jouer et Quitter.
-## Pour l'instant « Jouer » n'est relié à aucune scène : renseigne `scene_jeu` dans l'inspecteur
-## (ou écoute le signal `jouer_demande`) quand le jeu sera prêt.
+## « Jouer » lance `scene_jeu` (l'intro, puis la salle du trône, puis le labyrinthe).
+## En bas à droite : état du sceptre Arduino (le jeu se joue aussi au clavier).
 
 signal jouer_demande
 
@@ -21,6 +21,7 @@ signal jouer_demande
 @onready var _bouton_jouer: Button = %BoutonJouer
 @onready var _bouton_quitter: Button = %BoutonQuitter
 @onready var _voile: ColorRect = $Voile
+@onready var _etat_sceptre: Label = %EtatSceptre
 
 var _en_sortie := false
 
@@ -28,6 +29,7 @@ func _ready() -> void:
 	_bouton_jouer.pressed.connect(_sur_jouer)
 	_bouton_quitter.pressed.connect(_sur_quitter)
 	_bouton_jouer.grab_focus()  # navigation au clavier / manette possible tout de suite
+	_suivre_sceptre()
 
 	# Musique en boucle, avec une montée douce.
 	if _musique.stream is AudioStreamOggVorbis:
@@ -63,3 +65,17 @@ func _fondu_vers_noir() -> void:
 	t.tween_property(_voile, "color:a", 1.0, fondu_sortie)
 	t.tween_property(_musique, "volume_db", -60.0, fondu_sortie)
 	await t.finished
+
+## Affiche si le sceptre (Arduino) est branché.
+func _suivre_sceptre() -> void:
+	var arduino := get_node_or_null("/root/ArduinoManager")
+	if arduino == null:
+		_etat_sceptre.visible = false
+		return
+	arduino.arduino_connected.connect(_maj_sceptre.bind(true))
+	arduino.arduino_disconnected.connect(_maj_sceptre.bind(false))
+	_maj_sceptre(arduino.get("_paired") == true)
+
+func _maj_sceptre(connecte: bool) -> void:
+	_etat_sceptre.text = "Sceptre : connecté" if connecte else "Sceptre : non connecté (clavier)"
+	_etat_sceptre.modulate = Color(0.6, 1.0, 0.6) if connecte else Color(1, 1, 1, 0.8)

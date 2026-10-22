@@ -4,9 +4,11 @@
 [ext_resource type="Script" uid="uid://c4mfe3yoyavee" path="res://Scenes/Chateau/croisement.gd" id="1_qy1ji"]
 [ext_resource type="Texture2D" uid="uid://d1pagsno1fgju" path="res://Map3D/dungeon_assets/dungeon_albedo.png" id="3_db8og"]
 
-[sub_resource type="Environment" id="Environment_wgfif"]
-volumetric_fog_enabled = true
-volumetric_fog_density = 0.0
+[sub_resource type="FogMaterial" id="FogMaterial_brume"]
+density = 2.0
+albedo = Color(0.78, 0.76, 0.8, 1)
+height_falloff = 0.15
+edge_fade = 0.35
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_65gt5"]
 
@@ -93,9 +95,6 @@ shadow_mesh = SubResource("ArrayMesh_xvcrb")
 [node name="Node3D" type="Node3D" unique_id=1953727959]
 script = ExtResource("1_qy1ji")
 
-[node name="WorldEnvironment" type="WorldEnvironment" parent="." unique_id=759031755]
-environment = SubResource("Environment_wgfif")
-
 [node name="GridMap" type="GridMap" parent="." unique_id=2057404273]
 mesh_library = ExtResource("1_ph5d8")
 data = {
@@ -133,12 +132,15 @@ transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, -14,
 
 [node name="FogVolume" type="FogVolume" parent="." unique_id=1337133424]
 transform = Transform3D(2.1000001, 0, 0, 0, 4.0319996, 0, 0, 0, 1.6, 1, 1, -15)
+material = SubResource("FogMaterial_brume")
 
 [node name="FogVolume2" type="FogVolume" parent="." unique_id=122979200]
 transform = Transform3D(-9.179392e-08, 0, -1.6, 0, 4.0319996, 0, 2.1000001, 0, -6.9938224e-08, -6, 1, -9)
+material = SubResource("FogMaterial_brume")
 
 [node name="FogVolume3" type="FogVolume" parent="." unique_id=2026008743]
 transform = Transform3D(-9.179392e-08, 0, 1.6, 0, 4.0319996, 0, -2.1000001, 0, -6.9938224e-08, 7, 1, -9)
+material = SubResource("FogMaterial_brume")
 
 [node name="wall_doorway2" type="Node3D" parent="." unique_id=905815866]
 transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, 1, 1, 1)

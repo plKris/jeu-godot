@@ -73,6 +73,8 @@ signal salut_termine
 var entree_externe := Vector2.ZERO
 ## Vrai pendant que le cortège avance.
 var en_mouvement := false
+## Faux = le roi n'obéit plus (fin de partie, pause…) ; il s'arrête doucement.
+var controle_actif := true
 
 @onready var _visuel: Node3D = $Visuel
 @onready var _palanquin: Node3D = $Visuel/Palanquin
@@ -120,6 +122,8 @@ func _sur_bouton_sceptre(appuye: bool) -> void:
 func _physics_process(delta: float) -> void:
 	_temps += delta
 	var entree := entree_externe if entree_externe != Vector2.ZERO else _lire_clavier()
+	if not controle_actif:
+		entree = Vector2.ZERO
 	var direction := Vector3(entree.x, 0.0, entree.y)
 	if relatif_camera:
 		var cam := get_viewport().get_camera_3d()
@@ -152,7 +156,7 @@ func _physics_process(delta: float) -> void:
 
 func _unhandled_input(event: InputEvent) -> void:
 	var action: String = action_salut if InputMap.has_action(action_salut) else "ui_accept"
-	if event.is_action_pressed(action):
+	if controle_actif and event.is_action_pressed(action):
 		saluer()
 
 ##lève le sceptre puis le redescend.
