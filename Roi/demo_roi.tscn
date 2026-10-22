@@ -277,8 +277,9 @@ mesh = SubResource("BoxMesh_ypt7a")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.6, 0)
 shape = SubResource("BoxShape3D_b7agb")
 
-[node name="RoiPorte" parent="." unique_id=1958739726 instance=ExtResource("2_1oav7")]
+[node name="RoiPorte" parent="." unique_id=1958739726 node_paths=PackedStringArray("tapis") instance=ExtResource("2_1oav7")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 4)
+tapis = NodePath("../TapisRouge")
 
 [node name="Camera" type="Camera3D" parent="." unique_id=1104225825 node_paths=PackedStringArray("cible")]
 transform = Transform3D(1, 0, 0, 0, 0.8872168, 0.46135277, 0, -0.46135277, 0.8872168, 0, 5.5, 11.5)
