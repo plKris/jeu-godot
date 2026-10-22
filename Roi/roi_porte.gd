@@ -1,7 +1,7 @@
 class_name RoiPorte
 extends CharacterBody3D
 
-##  flèches ou ZQSD 
+
 ## Espace (action « my_action » si elle existe, sinon ui_accept) pour que le roi lève son sceptre.
 
 

@@ -15,7 +15,7 @@ General/banks_path="res://FMOD Banks/Desktop"
 [application]
 
 config/name="TestCommunicationArduinoForStudents"
-run/main_scene="res://Scenes/Monde.tscn"
+run/main_scene="uid://w4o5q0vgthul"
 config/features=PackedStringArray("4.7", "Forward Plus")
 config/icon="res://Images and ressources/Images/icon.svg"
 
