@@ -1,0 +1,11 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://Roi/garde.gd" id="1_garde"]
+[ext_resource type="PackedScene" path="res://Roi/modeles/Knight_Free/FBX/Characters/Knight_01.fbx" id="2_knight"]
+
+[node name="Garde" type="Node3D" unique_id=1900000401]
+script = ExtResource("1_garde")
+
+[node name="Corps" type="Node3D" parent="." unique_id=1900000402]
+
+[node name="Modele" parent="Corps" unique_id=1900000403 instance=ExtResource("2_knight")]

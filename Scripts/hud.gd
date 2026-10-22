@@ -1,5 +1,6 @@
 extends CanvasLayer
-## Interface du jeu : vies, progression, messages, pause (Échap), écrans de défaite et de victoire.
+## Interface du jeu : vies, progression, messages, pause (Échap).
+## Les écrans de fin (game_over.tscn / victoire.tscn) sont lancés par Monde.
 
 ## Scène du menu principal (bouton « Menu »).
 @export_file("*.tscn") var scene_menu := "res://Menu/menu_principal.tscn"
@@ -8,6 +9,7 @@ extends CanvasLayer
 
 @onready var _coeurs = %Coeurs
 @onready var _progression: Label = %Progression
+@onready var _gardes: Label = %Gardes
 @onready var _message: Label = %Message
 @onready var _flash: ColorRect = %Flash
 @onready var _panneau: Control = %Panneau
@@ -28,13 +30,13 @@ func _ready() -> void:
 	Partie.progression_changee.connect(_sur_progression)
 	Partie.message.connect(afficher_message)
 	Partie.vie_perdue.connect(_sur_vie_perdue)
-	Partie.partie_perdue.connect(_sur_defaite)
-	Partie.partie_gagnee.connect(_sur_victoire)
+	Partie.charges_gardes_changees.connect(_sur_gardes)
 	_bouton_reprendre.pressed.connect(_reprendre)
 	_bouton_rejouer.pressed.connect(_rejouer)
 	_bouton_menu.pressed.connect(_menu)
 	_sur_vies(Partie.vies, Partie.vies_max)
 	_sur_progression(Partie.reussis, Partie.objectif)
+	_sur_gardes(Partie.charges_gardes, Partie.charges_gardes_max)
 
 func _unhandled_input(event: InputEvent) -> void:
 	if event.is_action_pressed("ui_cancel") and not Partie.terminee:
@@ -61,20 +63,13 @@ func _sur_vies(vies: int, vies_max: int) -> void:
 func _sur_progression(reussis: int, objectif: int) -> void:
 	_progression.text = "Croisement %d / %d" % [mini(reussis + 1, objectif), objectif]
 
+func _sur_gardes(charges: int, _charges_max: int) -> void:
+	_gardes.text = "Gardes : %d" % charges
+	_gardes.modulate = Color.WHITE if charges > 0 else Color(1, 1, 1, 0.4)
+
 func _sur_vie_perdue() -> void:
 	_flash.color.a = 0.45
 	create_tween().tween_property(_flash, "color:a", 0.0, 0.6)
-
-func _sur_defaite() -> void:
-	await get_tree().create_timer(1.2).timeout
-	_ouvrir_panneau("Le roi est capturé !",
-			"Les paysans ont eu raison de Sa Majesté.\nCroisements franchis : %d / %d" % [Partie.reussis, Partie.objectif],
-			false)
-
-func _sur_victoire() -> void:
-	_ouvrir_panneau("Le roi s'est échappé !",
-			"Sa Majesté a trouvé la sortie du château\navec %d vie(s) restante(s)." % Partie.vies,
-			false)
 
 func _pause() -> void:
 	get_tree().paused = true

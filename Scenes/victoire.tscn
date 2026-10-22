@@ -1,0 +1,90 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://Scripts/ecran_fin.gd" id="0_fin"]
+[ext_resource type="AudioStream" uid="uid://bji827yx1715e" path="res://Roi/sons/fin/victoire.wav" id="0_son"]
+[ext_resource type="Theme" path="res://Menu/theme_chateau.tres" id="1_6k8xu"]
+[ext_resource type="Texture2D" path="res://Menu/fond_chateau.webp" id="2_fityl"]
+
+[node name="Victoire" type="Control" unique_id=1811830382]
+script = ExtResource("0_fin")
+victoire = true
+layout_mode = 3
+anchors_preset = 0
+anchor_right = 1.0
+anchor_bottom = 1.0
+theme = ExtResource("1_6k8xu")
+
+[node name="Fond" type="TextureRect" parent="." unique_id=1303498142]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+mouse_filter = 2
+texture = ExtResource("2_fityl")
+expand_mode = 1
+stretch_mode = 6
+
+[node name="Voile" type="ColorRect" parent="." unique_id=1156546618]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+mouse_filter = 2
+color = Color(0.12, 0.08, 0, 0.45)
+
+[node name="Contenu" type="CenterContainer" parent="." unique_id=962494269]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+
+[node name="Boite" type="VBoxContainer" parent="Contenu" unique_id=966449571]
+layout_mode = 2
+theme_override_constants/separation = 30
+
+[node name="Titre" type="Label" parent="Contenu/Boite" unique_id=1414276025]
+layout_mode = 2
+theme_override_font_sizes/font_size = 150
+theme_override_colors/font_color = Color(1, 0.84, 0.35, 1)
+theme_override_constants/outline_size = 24
+text = "VICTOIRE !"
+horizontal_alignment = 1
+
+[node name="SousTitre" type="Label" parent="Contenu/Boite" unique_id=389676748]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_font_sizes/font_size = 44
+text = "…"
+horizontal_alignment = 1
+
+[node name="Marge" type="Control" parent="Contenu/Boite" unique_id=323569433]
+custom_minimum_size = Vector2(0, 30)
+layout_mode = 2
+
+[node name="BoutonRejouer" type="Button" parent="Contenu/Boite" unique_id=1173247726]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(460, 110)
+layout_mode = 2
+size_flags_horizontal = 4
+text = "Rejouer"
+
+[node name="BoutonMenu" type="Button" parent="Contenu/Boite" unique_id=134517648]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(460, 110)
+layout_mode = 2
+size_flags_horizontal = 4
+text = "Menu principal"
+
+[node name="Noir" type="ColorRect" parent="." unique_id=679352040]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+mouse_filter = 2
+color = Color(0, 0, 0, 0)
+
+[node name="Son" type="AudioStreamPlayer" parent="." unique_id=1900000301]
+stream = ExtResource("0_son")
+autoplay = true

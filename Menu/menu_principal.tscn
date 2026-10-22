@@ -1,27 +1,24 @@
-[gd_scene format=3]
+[gd_scene format=3 uid="uid://w4o5q0vgthul"]
 
-[ext_resource type="Script" path="res://Menu/menu_principal.gd" id="1_menu"]
-[ext_resource type="Texture2D" path="res://Menu/fond_chateau.webp" id="2_fond"]
-[ext_resource type="AudioStream" path="res://Menu/musique_lobby.ogg" id="3_musique"]
+[ext_resource type="Script" uid="uid://dc3508cdgdqtn" path="res://Menu/menu_principal.gd" id="1_menu"]
+[ext_resource type="Texture2D" uid="uid://cnvd3chf7pk6n" path="res://Menu/fond_chateau.webp" id="2_fond"]
+[ext_resource type="AudioStream" uid="uid://c5y4imh7226en" path="res://Menu/musique_lobby.ogg" id="3_musique"]
 
-[sub_resource type="StyleBoxFlat" id="StyleBox_normal"]
-content_margin_left = 32.0
-content_margin_top = 14.0
-content_margin_right = 32.0
-content_margin_bottom = 18.0
-bg_color = Color(0.24, 0.14, 0.07, 0.92)
-border_width_left = 4
-border_width_top = 4
-border_width_right = 4
-border_width_bottom = 4
-border_color = Color(0.85, 0.66, 0.25, 1)
-corner_radius_top_left = 14
-corner_radius_top_right = 14
-corner_radius_bottom_right = 14
-corner_radius_bottom_left = 14
-shadow_color = Color(0, 0, 0, 0.45)
-shadow_size = 10
-shadow_offset = Vector2(0, 5)
+[sub_resource type="StyleBoxFlat" id="StyleBox_focus"]
+draw_center = false
+border_width_left = 3
+border_width_top = 3
+border_width_right = 3
+border_width_bottom = 3
+border_color = Color(1, 0.96, 0.82, 0.9)
+corner_radius_top_left = 18
+corner_radius_top_right = 18
+corner_radius_bottom_right = 18
+corner_radius_bottom_left = 18
+expand_margin_left = 7.0
+expand_margin_top = 7.0
+expand_margin_right = 7.0
+expand_margin_bottom = 7.0
 
 [sub_resource type="StyleBoxFlat" id="StyleBox_survol"]
 content_margin_left = 32.0
@@ -61,21 +58,24 @@ shadow_color = Color(0, 0, 0, 0.35)
 shadow_size = 4
 shadow_offset = Vector2(0, 2)
 
-[sub_resource type="StyleBoxFlat" id="StyleBox_focus"]
-draw_center = false
-border_width_left = 3
-border_width_top = 3
-border_width_right = 3
-border_width_bottom = 3
-border_color = Color(1, 0.96, 0.82, 0.9)
-corner_radius_top_left = 18
-corner_radius_top_right = 18
-corner_radius_bottom_right = 18
-corner_radius_bottom_left = 18
-expand_margin_left = 7.0
-expand_margin_top = 7.0
-expand_margin_right = 7.0
-expand_margin_bottom = 7.0
+[sub_resource type="StyleBoxFlat" id="StyleBox_normal"]
+content_margin_left = 32.0
+content_margin_top = 14.0
+content_margin_right = 32.0
+content_margin_bottom = 18.0
+bg_color = Color(0.24, 0.14, 0.07, 0.92)
+border_width_left = 4
+border_width_top = 4
+border_width_right = 4
+border_width_bottom = 4
+border_color = Color(0.85, 0.66, 0.25, 1)
+corner_radius_top_left = 14
+corner_radius_top_right = 14
+corner_radius_bottom_right = 14
+corner_radius_bottom_left = 14
+shadow_color = Color(0, 0, 0, 0.45)
+shadow_size = 10
+shadow_offset = Vector2(0, 5)
 
 [sub_resource type="Theme" id="Theme_menu"]
 Button/colors/font_color = Color(0.98, 0.93, 0.8, 1)
@@ -101,7 +101,7 @@ gradient = SubResource("Gradient_ombre")
 width = 256
 height = 4
 
-[node name="MenuPrincipal" type="Control"]
+[node name="MenuPrincipal" type="Control" unique_id=1562398362]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -112,7 +112,7 @@ theme = SubResource("Theme_menu")
 script = ExtResource("1_menu")
 scene_jeu = "res://Scenes/intro.tscn"
 
-[node name="Fond" type="TextureRect" parent="."]
+[node name="Fond" type="TextureRect" parent="." unique_id=489406892]
 layout_mode = 1
 anchors_preset = 10
 anchor_right = 1.0
@@ -124,7 +124,7 @@ texture = ExtResource("2_fond")
 expand_mode = 1
 stretch_mode = 6
 
-[node name="Ombre" type="TextureRect" parent="."]
+[node name="Ombre" type="TextureRect" parent="." unique_id=920236667]
 layout_mode = 1
 anchors_preset = 9
 anchor_bottom = 1.0
@@ -134,7 +134,7 @@ mouse_filter = 2
 texture = SubResource("GradientTexture_ombre")
 expand_mode = 1
 
-[node name="Boutons" type="VBoxContainer" parent="."]
+[node name="Boutons" type="VBoxContainer" parent="." unique_id=363938005]
 layout_mode = 1
 anchors_preset = 4
 anchor_top = 0.5
@@ -147,19 +147,19 @@ grow_vertical = 2
 theme_override_constants/separation = 48
 alignment = 1
 
-[node name="BoutonJouer" type="Button" parent="Boutons"]
+[node name="BoutonJouer" type="Button" parent="Boutons" unique_id=915271117]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(460, 115)
 layout_mode = 2
 text = "Jouer"
 
-[node name="BoutonQuitter" type="Button" parent="Boutons"]
+[node name="BoutonQuitter" type="Button" parent="Boutons" unique_id=218049569]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(460, 115)
 layout_mode = 2
 text = "Quitter"
 
-[node name="EtatSceptre" type="Label" parent="."]
+[node name="EtatSceptre" type="Label" parent="." unique_id=45911479]
 unique_name_in_owner = true
 layout_mode = 1
 anchors_preset = 3
@@ -181,7 +181,7 @@ text = "Sceptre : non connecté (clavier)"
 horizontal_alignment = 2
 vertical_alignment = 1
 
-[node name="Voile" type="ColorRect" parent="."]
+[node name="Voile" type="ColorRect" parent="." unique_id=227049637]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -191,6 +191,6 @@ grow_vertical = 2
 mouse_filter = 2
 color = Color(0, 0, 0, 1)
 
-[node name="Musique" type="AudioStreamPlayer" parent="."]
+[node name="Musique" type="AudioStreamPlayer" parent="." unique_id=1820410614]
 stream = ExtResource("3_musique")
 volume_db = -60.0

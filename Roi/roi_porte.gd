@@ -100,6 +100,11 @@ var _lecteurs := {}
 
 func _ready() -> void:
 	_palanquin_y = _palanquin.position.y
+	# Les sons 3D sont entendus depuis le roi (nœud AudioListener3D de roi_porte.tscn),
+	# pas depuis la caméra : la foule cachée d'un couloir est plus forte quand il s'en approche.
+	var oreille := get_node_or_null("AudioListener3D") as AudioListener3D
+	if oreille:
+		oreille.make_current()
 	_preparer_sons_pas()
 	_arduino = get_node_or_null("/root/ArduinoManager")
 	if _arduino and utiliser_sceptre:

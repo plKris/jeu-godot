@@ -3,8 +3,8 @@
 [ext_resource type="PackedScene" uid="uid://0nh48ijfugmx" path="res://Roi/roi_porte.tscn" id="2_rgb1w"]
 [ext_resource type="PackedScene" path="res://Roi/foule_paysans.tscn" id="3_vxnbm"]
 [ext_resource type="PackedScene" uid="uid://d2pwx61gc71ht" path="res://Scenes/Chateau/croisement.tscn" id="3_xv00n"]
-[ext_resource type="Script" path="res://Scripts/monde.gd" id="4_monde"]
-[ext_resource type="Script" path="res://Roi/camera_suivi.gd" id="5_camera"]
+[ext_resource type="Script" uid="uid://d0ma08s0r52xg" path="res://Scripts/monde.gd" id="4_monde"]
+[ext_resource type="Script" uid="uid://dlmee4imtresq" path="res://Roi/camera_suivi.gd" id="5_camera"]
 [ext_resource type="PackedScene" path="res://Scenes/hud.tscn" id="6_hud"]
 
 [sub_resource type="Environment" id="Environment_monde"]
@@ -102,7 +102,7 @@ mesh = SubResource("ArrayMesh_q0yr2")
 shape = SubResource("ConcavePolygonShape3D_xv00n")
 
 [node name="CameraSuivi" type="Camera3D" parent="." unique_id=1680263317 node_paths=PackedStringArray("cible")]
-transform = Transform3D(1, 0, 0, 0, 0.30, 0.95, 0, -0.95, 0.30, 1, 12, 3.5)
+transform = Transform3D(1, 0, 0, 0, 0.3, 0.95, 0, -0.95, 0.3, 1, 12, 3.5)
 current = true
 fov = 60.0
 script = ExtResource("5_camera")

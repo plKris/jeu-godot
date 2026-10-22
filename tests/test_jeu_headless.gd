@@ -11,6 +11,8 @@ var ok := true
 func _ready() -> void:
 	Partie.objectif = 2
 	monde = load("res://Scenes/Monde.tscn").instantiate()
+	monde.scene_victoire = ""  # le test reste dans Monde (pas d'écran de fin)
+	monde.scene_game_over = ""
 	add_child(monde)
 	roi = monde.get_node("RoiPorte")
 	await _attendre(0.5)
@@ -18,19 +20,24 @@ func _ready() -> void:
 	_verifier(Partie.vies == 3, "3 vies au départ")
 	var mauvais := _mauvais_couloir(c1)
 	var noms_indices := []
+	var joue_avant := false
 	for n in c1.get_children():
 		if n is AudioStreamPlayer3D and n.name.begins_with("Indice"):
 			noms_indices.append(n.name)
+			joue_avant = joue_avant or n.playing
+	_verifier(not joue_avant, "aucun bruit de foule avant d'entrer dans un couloir")
 	_verifier(noms_indices.size() == 2 and not noms_indices.has("Indice" + c1.COULOIRS[c1.bonne_porte]["nom"]),
-			"indices sonores dans les 2 mauvais couloirs seulement %s" % [noms_indices])
+			"nœuds de son de foule dans les 2 mauvais couloirs seulement %s" % [noms_indices])
 	# 1) Aller dans un mauvais couloir.
 	print("[TEST] bon couloir = %d, on essaie d'abord le %d" % [c1.bonne_porte, mauvais])
 	await _aller(c1, Vector3(1, 0, -9))
-	await _aller(c1, _point_couloir(mauvais, 3.0))
+	await _aller(c1, _point_couloir(mauvais, 3.0 + c1.recul_declenchement))
 	await _attendre(0.3)
 	_verifier(Partie.vies == 2, "mauvais couloir : une vie perdue (vies=%d)" % Partie.vies)
 	var foule := c1.get_node_or_null("Paysans" + c1.COULOIRS[mauvais]["nom"])
 	_verifier(foule != null and foule.paysans.size() == c1.nb_paysans, "des paysans ont surgi")
+	var son := c1.get_node_or_null("Indice" + c1.COULOIRS[mauvais]["nom"]) as AudioStreamPlayer3D
+	_verifier(son != null and son.playing, "on entend la foule du mauvais couloir")
 	# 2) Demi-tour vers le croisement, les paysans doivent rester dans leur couloir.
 	await _aller(c1, Vector3(1, 0, -9), 3.0)
 	await _attendre(3.0)
@@ -59,10 +66,32 @@ func _ready() -> void:
 	await _aller(c2, _point_couloir(c2.bonne_porte, 13.0), 8.0)
 	await _attendre(0.3)
 	_verifier(gagne[0], "dernier bon couloir : victoire")
+	# 4bis) Gardes : nouvelle partie, le roi appelle ses gardes -> un mauvais couloir est barré.
+	monde.queue_free()
+	await _attendre(0.2)
+	monde = load("res://Scenes/Monde.tscn").instantiate()
+	monde.scene_victoire = ""
+	monde.scene_game_over = ""
+	add_child(monde)
+	roi = monde.get_node("RoiPorte")
+	await _attendre(0.3)
+	c1 = monde.get_node("Croisement1")
+	await _aller(c1, Vector3(1, 0, -8.5))
+	var charges_avant := Partie.charges_gardes
+	_verifier(Partie.appeler_gardes(), "appel des gardes accepté")
+	_verifier(Partie.charges_gardes == charges_avant - 1, "une charge de gardes utilisée")
+	_verifier(not Partie.appeler_gardes(), "un seul couloir barré par croisement")
+	var barre: int = c1._couloirs_bloques.keys()[0]
+	_verifier(barre != c1.bonne_porte, "les gardes barrent un MAUVAIS couloir")
+	await _attendre(2.5)
+	await _aller(c1, _point_couloir(barre, 5.0), 3.0)
+	_verifier(Partie.vies == 3 and not c1._couloirs_punis.has(barre), "le roi ne peut pas entrer dans le couloir barré")
 	# 5) Nouvelle partie : rester dans un mauvais couloir -> les paysans attrapent le roi -> défaite.
 	monde.queue_free()
 	await _attendre(0.2)
 	monde = load("res://Scenes/Monde.tscn").instantiate()
+	monde.scene_victoire = ""  # le test reste dans Monde (pas d'écran de fin)
+	monde.scene_game_over = ""
 	add_child(monde)
 	roi = monde.get_node("RoiPorte")
 	await _attendre(0.3)

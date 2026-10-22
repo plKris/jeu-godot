@@ -15,22 +15,31 @@ enum Couloir { AUCUN, GAUCHE, FACE, DROITE }
 @export var vitesse_paysans := 2.6
 ## Taille des paysans (le roi porté est à l'échelle 0,5 dans Monde).
 @export var echelle_paysans := 0.8
+## Recule le déclenchement de la charge (mauvais couloir) plus loin dans le couloir, en mètres.
+## 0 = juste à l'entrée du couloir ; 2,5 = au bord du brouillard.
+@export_range(0.0, 6.0, 0.25) var recul_declenchement := 2.5
 ## Affiche le bon couloir dans la console (pour tester).
 @export var afficher_solution := false
 
-@export_group("Indice sonore")
-## Dans les mauvais couloirs, on entend la foule cachée derrière le brouillard (étouffée).
-@export var indice_sonore := true
-## Son de la foule cachée. Vide = res://Roi/sons/foule/foule_villageois.wav.
-@export var son_indice: AudioStream
-## Volume de l'indice (dB) : bien plus bas que la foule qui charge.
-@export_range(-40.0, 6.0, 0.5) var volume_indice_db := -12.0
-## Étouffement : plus la valeur est basse, plus le son est sourd (comme derrière un mur).
-@export_range(200.0, 20000.0, 50.0) var etouffement_hz := 900.0
-## Distance (m) à laquelle l'indice garde son volume plein ; au-delà il diminue.
-@export var portee_indice := 4.0
+@export_group("Son de la foule")
+## Quand le roi entre dans un mauvais couloir, on entend la foule qui charge : c'est le nœud
+## AudioStreamPlayer3D « IndiceGauche », « IndiceFace » ou « IndiceDroite » de croisement.tscn.
+## Règle son fichier (stream), son volume (volume_db), sa portée (unit_size) dans l'éditeur.
+## Avant d'entrer dans un couloir, on n'entend rien.
+@export var son_foule := true
+## Quand le roi prend le bon couloir, le bruit des mauvais couloirs s'éteint en ce temps (s).
+@export var duree_extinction := 1.5
+
+@export_group("Gardes")
+## Nombre de gardes qui viennent barrer un mauvais couloir quand le roi les appelle.
+@export var nb_gardes := 3
+## Taille des gardes (les paysans sont à 0,8 ; les porteurs du palanquin à 0,5).
+@export var echelle_gardes := 0.85
+## Vrai : les gardes ne bloquent qu'un couloir par croisement (le joueur doit encore choisir).
+@export var un_seul_barrage_par_croisement := true
 
 const CHEMIN_CROISEMENT := "res://Scenes/Chateau/croisement.tscn"
+const SCENE_GARDE := preload("res://Roi/garde.tscn")
 const SCENE_PAYSAN := preload("res://Roi/paysan.tscn")
 
 ## Géométrie de chaque couloir, dans le repère du croisement (mesurée sur le GridMap, cases de 2 m).
@@ -40,21 +49,21 @@ const SCENE_PAYSAN := preload("res://Roi/paysan.tscn")
 ##  fond       : mur invisible au bout du couloir (retiré quand le croisement suivant est construit)
 const COULOIRS := {
 	Couloir.GAUCHE: {
-		"nom": "Gauche", "marqueur": "MarkerGauche", "porte": "PorteGauche",
+		"nom": "Gauche", "direction": Vector3.LEFT, "marqueur": "MarkerGauche", "porte": "PorteGauche",
 		"entree": AABB(Vector3(-3.25, 0, -10.5), Vector3(1.5, 4, 3)),
 		"zone": AABB(Vector3(-12.5, -10, -10.1), Vector3(9.7, 20, 2.2)),
 		"apparition": AABB(Vector3(-12.2, 1.2, -10.0), Vector3(3.2, 0, 2.0)),
 		"fond": AABB(Vector3(-13.9, 0, -10.7), Vector3(0.6, 4, 3.4)),
 	},
 	Couloir.FACE: {
-		"nom": "Face", "marqueur": "MarkerFace", "porte": "PorteFace",
+		"nom": "Face", "direction": Vector3.FORWARD, "marqueur": "MarkerFace", "porte": "PorteFace",
 		"entree": AABB(Vector3(-0.5, 0, -13.25), Vector3(3, 4, 1.5)),
 		"zone": AABB(Vector3(-0.1, -10, -22.5), Vector3(2.2, 20, 9.7)),
 		"apparition": AABB(Vector3(0.0, 1.2, -21.5), Vector3(2.0, 0, 3.2)),
 		"fond": AABB(Vector3(-0.7, 0, -23.9), Vector3(3.4, 4, 0.6)),
 	},
 	Couloir.DROITE: {
-		"nom": "Droite", "marqueur": "MarkerDroite", "porte": "PorteDroite",
+		"nom": "Droite", "direction": Vector3.RIGHT, "marqueur": "MarkerDroite", "porte": "PorteDroite",
 		"entree": AABB(Vector3(3.75, 0, -10.5), Vector3(1.5, 4, 3)),
 		"zone": AABB(Vector3(4.8, -10, -10.1), Vector3(9.7, 20, 2.2)),
 		"apparition": AABB(Vector3(11.0, 1.2, -10.0), Vector3(3.2, 0, 2.0)),
@@ -77,7 +86,8 @@ var _sortie := false  # vrai si le bon couloir de ce croisement mène dehors
 var _couloirs_punis := {}
 var _murs_fond := {}
 var _mur_entree: StaticBody3D
-var _indices := {}  # couloir -> AudioStreamPlayer3D de la foule cachée
+var _couloirs_bloques := {}  # couloir -> true quand des gardes le barrent
+var _indices := {}  # couloir -> AudioStreamPlayer3D de la foule (seulement les mauvais couloirs)
 
 func _ready() -> void:
 	bonne_porte = [Couloir.GAUCHE, Couloir.FACE, Couloir.DROITE].pick_random()
@@ -85,14 +95,17 @@ func _ready() -> void:
 		print("[Croisement %d] bon couloir : %s" % [numero, COULOIRS[bonne_porte]["nom"]])
 	for c in COULOIRS:
 		var infos: Dictionary = COULOIRS[c]
-		_creer_zone("Entree" + infos["nom"], infos["entree"], _sur_entree_couloir.bind(c))
+		var entree: AABB = infos["entree"]
+		entree.position += (infos["direction"] as Vector3) * recul_declenchement
+		_creer_zone("Entree" + infos["nom"], entree, _sur_entree_couloir.bind(c))
 		_murs_fond[c] = _creer_mur("Fond" + infos["nom"], infos["fond"])
-		if indice_sonore and c != bonne_porte:
-			_creer_indice_sonore(c)
+		_preparer_indice_sonore(c)
 	_creer_zone("Arrivee", ZONE_ARRIVEE, _sur_arrivee)
 	_mur_entree = _creer_mur("MurEntree", MUR_ENTREE)
 	# Le premier croisement est fermé derrière le roi dès le départ.
 	_activer_mur(_mur_entree, precedent == null)
+	if precedent == null:
+		Partie.croisement_actuel = self
 
 # --- Signaux des portes du bout des couloirs (connectés dans croisement.tscn) ---------------
 
@@ -124,6 +137,13 @@ func _bon_couloir() -> void:
 	if _deja_genere:
 		return
 	_deja_genere = true
+	# Bon choix : le bruit des mauvais couloirs s'éteint.
+	for c in _indices:
+		var lecteur: AudioStreamPlayer3D = _indices[c]
+		if lecteur.playing:
+			var t := create_tween()
+			t.tween_property(lecteur, "volume_db", -60.0, duree_extinction)
+			t.tween_callback(lecteur.stop)
 	_sortie = Partie.dernier_croisement()
 	Partie.bon_couloir()
 	if _sortie:
@@ -148,6 +168,7 @@ func _sur_arrivee(body: Node3D) -> void:
 	if not _est_roi(body):
 		return
 	_activer_mur(_mur_entree, true)
+	Partie.croisement_actuel = self
 	# On libère les croisements trop loin derrière (ils pourraient chevaucher les suivants).
 	if precedent and is_instance_valid(precedent):
 		var ancien: Node = precedent.get("precedent")
@@ -157,16 +178,16 @@ func _sur_arrivee(body: Node3D) -> void:
 ## Fait apparaître une foule de paysans derrière le brouillard du couloir, qui charge le roi.
 func _faire_surgir_paysans(couloir: Couloir, roi: Node3D) -> void:
 	var infos: Dictionary = COULOIRS[couloir]
-	# La foule sort du brouillard : l'indice étouffé laisse place au vrai brouhaha.
+	# La foule sort du brouillard : on l'entend (nœud Indice du couloir).
 	if _indices.has(couloir):
-		var indice: AudioStreamPlayer3D = _indices[couloir]
-		_indices.erase(couloir)
-		var t := create_tween()
-		t.tween_property(indice, "volume_db", -60.0, 0.4)
-		t.tween_callback(indice.queue_free)
+		var lecteur: AudioStreamPlayer3D = _indices[couloir]
+		if not lecteur.finished.is_connected(lecteur.play):
+			lecteur.finished.connect(lecteur.play)  # en boucle
+		lecteur.play()
 	var foule := FoulePaysans.new()
 	foule.name = "Paysans" + infos["nom"]
 	foule.automatique = false
+	foule.son_actif = not _indices.has(couloir)  # pas de son en double avec le nœud Indice
 	foule.cible = roi
 	var app: AABB = infos["apparition"]
 	for i in nb_paysans:
@@ -207,27 +228,71 @@ func _creer_sortie(couloir: Couloir) -> void:
 	porte.position = centre
 	add_child(porte)
 
-## Brouhaha étouffé, en boucle, derrière le brouillard d'un mauvais couloir.
-func _creer_indice_sonore(couloir: Couloir) -> void:
-	if son_indice == null and ResourceLoader.exists(FoulePaysans.SON_FOULE_DEFAUT):
-		son_indice = load(FoulePaysans.SON_FOULE_DEFAUT)
-	if son_indice == null:
+## Prépare le nœud « Indice<Couloir> » : silencieux au départ, il ne joue que si le roi entre
+## dans ce couloir et que c'est un mauvais couloir. Le nœud du bon couloir est supprimé.
+func _preparer_indice_sonore(couloir: Couloir) -> void:
+	var lecteur := get_node_or_null("Indice" + COULOIRS[couloir]["nom"]) as AudioStreamPlayer3D
+	if lecteur == null:
 		return
-	var app: AABB = COULOIRS[couloir]["apparition"]
-	var lecteur := AudioStreamPlayer3D.new()
-	lecteur.name = "Indice" + COULOIRS[couloir]["nom"]
-	lecteur.stream = son_indice
-	lecteur.volume_db = volume_indice_db
-	lecteur.unit_size = portee_indice
-	lecteur.attenuation_filter_cutoff_hz = etouffement_hz
-	lecteur.attenuation_filter_db = -24.0
-	lecteur.pitch_scale = randf_range(0.92, 1.0)
-	lecteur.position = app.get_center() + Vector3.UP * 1.5
-	lecteur.finished.connect(lecteur.play)  # en boucle
-	add_child(lecteur)
-	# Départ à un endroit différent du fichier pour que deux couloirs ne soient pas synchronisés.
-	lecteur.play(randf() * son_indice.get_length() * 0.8)
+	lecteur.stop()
+	if not son_foule or couloir == bonne_porte or lecteur.stream == null:
+		lecteur.queue_free()
+		return
 	_indices[couloir] = lecteur
+
+# --- Gardes -------------------------------------------------------------------------------
+
+## Appelé quand le roi utilise une charge de gardes : des gardes accourent et barrent l'entrée
+## d'un mauvais couloir (un seul). Renvoie faux s'il n'y a plus rien à bloquer ici.
+func bloquer_un_mauvais_couloir() -> bool:
+	if _deja_genere:
+		return false  # le bon couloir est déjà trouvé
+	if un_seul_barrage_par_croisement and not _couloirs_bloques.is_empty():
+		return false
+	var roi := _trouver_roi_croisement()
+	var possibles := []
+	for c in COULOIRS:
+		if c == bonne_porte or _couloirs_punis.has(c) or _couloirs_bloques.has(c):
+			continue
+		if roi and _roi_dans_couloir(roi, c):
+			continue  # on n'enferme pas le roi dans le couloir
+		possibles.append(c)
+	if possibles.is_empty():
+		return false
+	var couloir: Couloir = possibles.pick_random()
+	_couloirs_bloques[couloir] = true
+	var infos: Dictionary = COULOIRS[couloir]
+	var dir: Vector3 = infos["direction"]
+	var entree: AABB = infos["entree"]
+	var bouche := entree.get_center()
+	bouche.y = 0.0
+	# Mur invisible à l'entrée du couloir (le roi ne peut plus y aller).
+	var travers := Vector3(absf(dir.z), 0, absf(dir.x))  # axe en travers du couloir
+	var taille := travers * 3.4 + Vector3(absf(dir.x), 0, absf(dir.z)) * 0.6 + Vector3(0, 4, 0)
+	_creer_mur("Barrage" + infos["nom"], AABB(bouche + Vector3(0, 2, 0) - taille / 2.0, taille))
+	# Les gardes sortent du fond du couloir et courent se placer en ligne à l'entrée.
+	for i in nb_gardes:
+		var g: Garde = SCENE_GARDE.instantiate()
+		g.name = "Garde%s%d" % [infos["nom"], i + 1]
+		g.scale = Vector3.ONE * echelle_gardes
+		var decalage := (float(i) - (nb_gardes - 1) / 2.0) * (2.0 / maxf(nb_gardes - 1, 1))
+		var arrivee := bouche + travers * decalage + Vector3(0, 1.05, 0)
+		g.position = arrivee + dir * (6.0 + randf() * 1.5)
+		add_child(g)
+		g.accourir(to_global(arrivee), global_transform.basis * -dir)
+	return true
+
+func _roi_dans_couloir(roi: Node3D, c: Couloir) -> bool:
+	var l := to_local(roi.global_position)
+	var bouche := (COULOIRS[c]["entree"] as AABB).get_center()
+	var dir: Vector3 = COULOIRS[c]["direction"]
+	return (l - bouche).dot(dir) > -1.2
+
+func _trouver_roi_croisement() -> Node3D:
+	for n in get_parent().get_children():
+		if n is RoiPorte:
+			return n
+	return null
 
 # --- Outils -------------------------------------------------------------------------------
 

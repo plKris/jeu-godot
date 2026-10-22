@@ -4,8 +4,9 @@ Le peuple s'est soulevé : on incarne le roi, porté sur son palanquin, qui fuit
 - **Mauvais couloir** : des paysans surgissent de derrière le brouillard et chargent. Le roi perd **une vie** et doit faire demi-tour. Les paysans **restent dans leur couloir** (ils s'arrêtent à l'entrée et attendent). S'ils attrapent le roi, il perd encore une vie.
 - **Bon couloir** : le croisement suivant se construit au bout. Après le dernier, la lumière du jour indique la sortie : **victoire**.
 - **0 vie** : le roi est capturé, écran de défaite (Rejouer / Menu principal).
+- **Gardes** : le roi a **2 charges** par partie. Touche **G** (ou bouton du sceptre) : il lève son sceptre et des gardes (modèle Knight Free) accourent barrer **un** mauvais couloir du croisement (un seul barrage par croisement). Réglages : `charges_gardes_max` dans `Scripts/partie.gd`, groupe « Gardes » de `croisement.gd`.
 
-**Commandes** : flèches ou ZQSD (ou inclinaison du sceptre Arduino) pour avancer, **Maj** pour courir, **Espace** (ou bouton du sceptre) pour saluer, **Échap** pour la pause.
+**Commandes** : flèches ou ZQSD (ou inclinaison du sceptre Arduino) pour avancer, **Maj** pour courir, **G** (ou bouton du sceptre) pour appeler les gardes, **Espace** pour saluer, **Échap** pour la pause.
 
 **Enchaînement des scènes** : `Menu/menu_principal.tscn` (scène principale) → `Scenes/intro.tscn` → `Scenes/tronesalle.tscn` (le roi sort par la porte) → `Scenes/Monde.tscn` (le labyrinthe). `Scenes/Start.tscn` (écran de test Arduino) existe toujours mais n'est plus la scène de départ.
 
