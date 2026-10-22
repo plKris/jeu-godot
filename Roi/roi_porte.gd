@@ -28,9 +28,22 @@ signal salut_termine
 ## Nom de l'action qui déclenche le salut du roi.
 @export var action_salut := "my_action"
 
-@export_group("Son (FMOD)")
-## Événement FMOD joué à chaque pas des gardes (laisse vide pour couper le son).
-@export var evenement_pas := "event:/Pas_Garde"
+@export_group("Son des pas")
+## Coupe/active les bruits de pas.
+@export var sons_actifs := true
+## Volume des pas en dB (0 = volume d'origine).
+@export_range(-40.0, 12.0, 0.5) var volume_pas_db := 0.0
+## Volume en plus (dB) quand le cortège marche sur le tapis (+6 dB = nettement plus fort).
+@export_range(0.0, 24.0, 0.5) var bonus_tapis_db := 3.0
+## Variation aléatoire de hauteur entre deux pas (1.0 = aucune, 1.1 = ±10 %).
+@export_range(1.0, 1.5, 0.01) var variation_hauteur := 1.08
+## Sons joués sur la pierre (choisis au hasard à chaque pas). Rempli automatiquement si vide.
+@export var sons_pierre: Array[AudioStream] = []
+## Sons joués sur le tapis. Rempli automatiquement si vide.
+@export var sons_tapis: Array[AudioStream] = []
+## Événement FMOD (optionnel). S'il est rempli ET trouvé dans une banque chargée, FMOD est utilisé
+## à la place des fichiers .wav ci-dessus. Vide = sons Godot (dossier res://Roi/sons/pas/).
+@export var evenement_pas := ""
 ## Paramètre FMOD (facultatif) qui reçoit la vitesse : 0 = arrêt, 1 = marche, 1,8 = course.
 ## Laisse vide si ton événement n'a pas de paramètre.
 @export var parametre_vitesse := ""
@@ -76,8 +89,16 @@ var _avertissement_pas := false
 
 var _arduino: Node  # l'autoload ArduinoManager, s'il existe
 
+const DOSSIER_PAS := "res://Roi/sons/pas/"
+const NB_VARIANTES_PAS := 6
+var _alea_pierre: AudioStreamRandomizer
+var _alea_tapis: AudioStreamRandomizer
+## Pour chaque point d'émission (palanquin ou garde) : [lecteur pierre, lecteur tapis].
+var _lecteurs := {}
+
 func _ready() -> void:
 	_palanquin_y = _palanquin.position.y
+	_preparer_sons_pas()
 	_arduino = get_node_or_null("/root/ArduinoManager")
 	if _arduino and utiliser_sceptre:
 		_arduino.direction_changed.connect(_sur_direction_sceptre)
@@ -150,13 +171,59 @@ func _franchit(a: float, b: float, seuil: float) -> bool:
 		return a < seuil and b >= seuil
 	return a < seuil or b >= seuil
 
+## Charge les .wav de res://Roi/sons/pas/ et crée les lecteurs 3D (un au palanquin, un par garde).
+func _preparer_sons_pas() -> void:
+	if sons_pierre.is_empty():
+		sons_pierre = _charger_variantes("pierre")
+	if sons_tapis.is_empty():
+		sons_tapis = _charger_variantes("tapis")
+	if sons_tapis.is_empty():
+		sons_tapis = sons_pierre
+	_alea_pierre = _creer_aleatoire(sons_pierre)
+	_alea_tapis = _creer_aleatoire(sons_tapis)
+	var points: Array[Node] = [_palanquin]
+	points.append_array(_gardes)
+	for p in points:
+		_lecteurs[p] = [_creer_lecteur(p, _alea_pierre), _creer_lecteur(p, _alea_tapis)]
+
+func _charger_variantes(sol: String) -> Array[AudioStream]:
+	var liste: Array[AudioStream] = []
+	for i in range(1, NB_VARIANTES_PAS + 1):
+		var chemin := "%s%s_%d.wav" % [DOSSIER_PAS, sol, i]
+		if ResourceLoader.exists(chemin):
+			liste.append(load(chemin))
+	if liste.is_empty():
+		push_warning("Son des pas : aucun fichier %s_*.wav trouvé dans %s" % [sol, DOSSIER_PAS])
+	return liste
+
+func _creer_aleatoire(sons: Array[AudioStream]) -> AudioStreamRandomizer:
+	var r := AudioStreamRandomizer.new()
+	r.playback_mode = AudioStreamRandomizer.PLAYBACK_RANDOM_NO_REPEATS if sons.size() > 1 \
+			else AudioStreamRandomizer.PLAYBACK_RANDOM
+	r.random_pitch = variation_hauteur
+	r.random_volume_offset_db = 1.5
+	for s in sons:
+		r.add_stream(-1, s)
+	return r
+
+func _creer_lecteur(parent: Node, flux: AudioStream) -> AudioStreamPlayer3D:
+	var l := AudioStreamPlayer3D.new()
+	l.name = "SonPas"
+	l.stream = flux
+	l.volume_db = volume_pas_db
+	l.unit_size = 12.0
+	l.max_polyphony = 4
+	parent.add_child.call_deferred(l)
+	return l
+
 func _jouer_pas(vitesse_relative: float) -> void:
-	if evenement_pas == "" or _intensite < seuil_pas:
+	if not sons_actifs or _intensite < seuil_pas:
 		return
-	if not FmodServer.check_event_path(evenement_pas):
-		if not _avertissement_pas:
+	if evenement_pas == "" or not FmodServer.check_event_path(evenement_pas):
+		if evenement_pas != "" and not _avertissement_pas:
 			_avertissement_pas = true
-			push_warning("Son des pas : l'événement %s est introuvable (banque chargée ? nom exact ?)" % evenement_pas)
+			push_warning("Son des pas : événement FMOD %s introuvable, utilisation des .wav Godot" % evenement_pas)
+		_jouer_pas_godot()
 		return
 	if not un_son_par_garde:
 		FmodServer.play_one_shot_attached_with_params(evenement_pas, _palanquin,
@@ -171,6 +238,31 @@ func _jouer_pas(vitesse_relative: float) -> void:
 					FmodServer.play_one_shot_attached_with_params(evenement_pas, g, params))
 		else:
 			FmodServer.play_one_shot_attached_with_params(evenement_pas, g, params)
+
+## Pas joués avec les .wav (pierre ou tapis selon le sol sous le point d'émission).
+func _jouer_pas_godot() -> void:
+	if not un_son_par_garde:
+		_jouer_au_point(_palanquin)
+		return
+	for g in _gardes:
+		var d := randf() * decalage_max_pas
+		if d > 0.005:
+			get_tree().create_timer(d).timeout.connect(func():
+				if is_instance_valid(g):
+					_jouer_au_point(g))
+		else:
+			_jouer_au_point(g)
+
+func _jouer_au_point(point: Node3D) -> void:
+	var paire: Array = _lecteurs.get(point, [])
+	if paire.is_empty():
+		return
+	var sur_tapis := tapis != null and _sur_tapis(point.global_position)
+	var l: AudioStreamPlayer3D = paire[1] if sur_tapis else paire[0]
+	if not l.is_inside_tree() or (l.stream as AudioStreamRandomizer).streams_count == 0:
+		return
+	l.volume_db = volume_pas_db + (bonus_tapis_db if sur_tapis else 0.0)
+	l.play()
 
 func _params_pas(vitesse_relative: float, position_pied: Vector3) -> Dictionary:
 	var params := {}
