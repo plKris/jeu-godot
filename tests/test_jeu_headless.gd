@@ -25,7 +25,7 @@ func _ready() -> void:
 		if n is AudioStreamPlayer3D and n.name.begins_with("Indice"):
 			noms_indices.append(n.name)
 			joue_avant = joue_avant or n.playing
-	_verifier(not joue_avant, "aucun bruit de foule avant d'entrer dans un couloir")
+	_verifier(joue_avant, "indice : la foule cachée s'entend avant le choix")
 	_verifier(noms_indices.size() == 2 and not noms_indices.has("Indice" + c1.COULOIRS[c1.bonne_porte]["nom"]),
 			"nœuds de son de foule dans les 2 mauvais couloirs seulement %s" % [noms_indices])
 	# 1) Aller dans un mauvais couloir.

@@ -22,11 +22,25 @@ enum Couloir { AUCUN, GAUCHE, FACE, DROITE }
 @export var afficher_solution := false
 
 @export_group("Son de la foule")
-## Quand le roi entre dans un mauvais couloir, on entend la foule qui charge : c'est le nœud
-## AudioStreamPlayer3D « IndiceGauche », « IndiceFace » ou « IndiceDroite » de croisement.tscn.
-## Règle son fichier (stream), son volume (volume_db), sa portée (unit_size) dans l'éditeur.
-## Avant d'entrer dans un couloir, on n'entend rien.
+## Le son vient des nœuds AudioStreamPlayer3D « IndiceGauche », « IndiceFace » et « IndiceDroite »
+## de croisement.tscn (fichier = stream, volume maximum = volume_db). Le nœud du bon couloir est
+## supprimé : seuls les mauvais couloirs font du bruit.
+##  - avant le choix : foule cachée, étouffée, de plus en plus forte quand le roi s'approche ;
+##  - quand les paysans surgissent : foule pleine et claire ;
+##  - après le bon choix : le bruit s'éteint.
 @export var son_foule := true
+## Faux : on n'entend rien avant d'entrer dans un mauvais couloir (pas d'indice).
+@export var indice_avant_choix := true
+## Au-delà de cette distance (m) de l'entrée d'un mauvais couloir, l'indice ne s'entend plus.
+@export var distance_indice := 14.0
+## Forme de la montée : 1 = régulière, 3 = discrète de loin puis très forte tout près.
+@export_range(0.5, 5.0, 0.1) var courbe_indice := 3.0
+## Volume en plus (dB) tout près de l'entrée d'un mauvais couloir (accentue l'approche).
+@export_range(0.0, 12.0, 0.5) var bonus_proche_db := 4.0
+## Indice de loin : son sourd (plus la valeur est basse, plus il est étouffé).
+@export_range(200.0, 20000.0, 50.0) var etouffement_hz := 700.0
+## Indice tout près de l'entrée : le son s'éclaircit jusqu'à cette valeur.
+@export_range(200.0, 20000.0, 50.0) var clair_hz := 5000.0
 ## Quand le roi prend le bon couloir, le bruit des mauvais couloirs s'éteint en ce temps (s).
 @export var duree_extinction := 1.5
 
@@ -88,6 +102,11 @@ var _murs_fond := {}
 var _mur_entree: StaticBody3D
 var _couloirs_bloques := {}  # couloir -> true quand des gardes le barrent
 var _indices := {}  # couloir -> AudioStreamPlayer3D de la foule (seulement les mauvais couloirs)
+var _volumes_max := {}  # couloir -> volume_db réglé dans l'éditeur
+var _bus_indices := {}  # couloir -> nom du bus audio (filtre passe-bas propre au couloir)
+var _surgis := {}  # couloir -> true quand les paysans en sont sortis (foule pleine)
+var _extinction := 0.0  # 0 = normal, 1 = bon couloir pris : la foule s'est tue
+var _roi_son: Node3D
 
 func _ready() -> void:
 	bonne_porte = [Couloir.GAUCHE, Couloir.FACE, Couloir.DROITE].pick_random()
@@ -138,12 +157,7 @@ func _bon_couloir() -> void:
 		return
 	_deja_genere = true
 	# Bon choix : le bruit des mauvais couloirs s'éteint.
-	for c in _indices:
-		var lecteur: AudioStreamPlayer3D = _indices[c]
-		if lecteur.playing:
-			var t := create_tween()
-			t.tween_property(lecteur, "volume_db", -60.0, duree_extinction)
-			t.tween_callback(lecteur.stop)
+	create_tween().tween_property(self, "_extinction", 1.0, duree_extinction)
 	_sortie = Partie.dernier_croisement()
 	Partie.bon_couloir()
 	if _sortie:
@@ -178,12 +192,12 @@ func _sur_arrivee(body: Node3D) -> void:
 ## Fait apparaître une foule de paysans derrière le brouillard du couloir, qui charge le roi.
 func _faire_surgir_paysans(couloir: Couloir, roi: Node3D) -> void:
 	var infos: Dictionary = COULOIRS[couloir]
-	# La foule sort du brouillard : on l'entend (nœud Indice du couloir).
+	# La foule sort du brouillard : on l'entend pleinement (nœud Indice du couloir).
 	if _indices.has(couloir):
+		_surgis[couloir] = true
 		var lecteur: AudioStreamPlayer3D = _indices[couloir]
-		if not lecteur.finished.is_connected(lecteur.play):
-			lecteur.finished.connect(lecteur.play)  # en boucle
-		lecteur.play()
+		if not lecteur.playing:
+			lecteur.play()
 	var foule := FoulePaysans.new()
 	foule.name = "Paysans" + infos["nom"]
 	foule.automatique = false
@@ -228,8 +242,7 @@ func _creer_sortie(couloir: Couloir) -> void:
 	porte.position = centre
 	add_child(porte)
 
-## Prépare le nœud « Indice<Couloir> » : silencieux au départ, il ne joue que si le roi entre
-## dans ce couloir et que c'est un mauvais couloir. Le nœud du bon couloir est supprimé.
+## Prépare le nœud « Indice<Couloir> » du couloir. Le nœud du bon couloir est supprimé.
 func _preparer_indice_sonore(couloir: Couloir) -> void:
 	var lecteur := get_node_or_null("Indice" + COULOIRS[couloir]["nom"]) as AudioStreamPlayer3D
 	if lecteur == null:
@@ -239,6 +252,69 @@ func _preparer_indice_sonore(couloir: Couloir) -> void:
 		lecteur.queue_free()
 		return
 	_indices[couloir] = lecteur
+	_volumes_max[couloir] = lecteur.volume_db
+	lecteur.volume_db = -80.0  # réglé à chaque image (_process)
+	lecteur.attenuation_model = AudioStreamPlayer3D.ATTENUATION_DISABLED
+	lecteur.attenuation_filter_cutoff_hz = 20500.0
+	lecteur.bus = _creer_bus(couloir)
+	if not lecteur.finished.is_connected(lecteur.play):
+		lecteur.finished.connect(lecteur.play)  # en boucle
+	if indice_avant_choix:
+		# Départ à un endroit différent du fichier pour que deux couloirs ne soient pas synchronisés.
+		lecteur.play(randf() * lecteur.stream.get_length() * 0.8)
+
+## Bus audio propre au couloir, avec un filtre passe-bas (son sourd ↔ son clair).
+func _creer_bus(couloir: Couloir) -> StringName:
+	var nom := "Foule_%d_%s" % [get_instance_id(), COULOIRS[couloir]["nom"]]
+	var i := AudioServer.bus_count
+	AudioServer.add_bus(i)
+	AudioServer.set_bus_name(i, nom)
+	AudioServer.set_bus_send(i, &"Master")
+	var filtre := AudioEffectLowPassFilter.new()
+	filtre.cutoff_hz = etouffement_hz
+	AudioServer.add_bus_effect(i, filtre)
+	_bus_indices[couloir] = nom
+	return nom
+
+func _exit_tree() -> void:
+	for c in _bus_indices:
+		var i := AudioServer.get_bus_index(_bus_indices[c])
+		if i > 0:
+			AudioServer.remove_bus(i)
+	_bus_indices.clear()
+
+## Volume et clarté de chaque mauvais couloir selon la distance du roi à son entrée.
+func _process(_delta: float) -> void:
+	if _indices.is_empty():
+		return
+	if _roi_son == null or not is_instance_valid(_roi_son):
+		_roi_son = _trouver_roi_croisement()
+		if _roi_son == null:
+			return
+	for c in _indices:
+		var lecteur: AudioStreamPlayer3D = _indices[c]
+		if not is_instance_valid(lecteur):
+			continue
+		var entree := to_global((COULOIRS[c]["entree"] as AABB).get_center())
+		var d := Vector2(entree.x - _roi_son.global_position.x, entree.z - _roi_son.global_position.z).length()
+		var proche := pow(clampf(1.0 - d / distance_indice, 0.0, 1.0), courbe_indice)
+		var vol: float
+		var coupure: float
+		if _surgis.has(c):
+			# Les paysans chargent : foule pleine, qui baisse un peu quand le roi s'éloigne.
+			vol = _volumes_max[c] + bonus_proche_db + linear_to_db(clampf(1.0 - d / (distance_indice * 1.5), 0.3, 1.0))
+			coupure = 20000.0
+		else:
+			vol = _volumes_max[c] + linear_to_db(maxf(proche, 0.0001)) + bonus_proche_db * proche
+			coupure = lerpf(etouffement_hz, clair_hz, proche)
+		vol -= 50.0 * _extinction
+		coupure = lerpf(coupure, 300.0, _extinction)
+		lecteur.volume_db = vol
+		var i := AudioServer.get_bus_index(_bus_indices.get(c, ""))
+		if i > 0:
+			var filtre := AudioServer.get_bus_effect(i, 0) as AudioEffectLowPassFilter
+			if filtre:
+				filtre.cutoff_hz = coupure
 
 # --- Gardes -------------------------------------------------------------------------------
 

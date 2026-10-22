@@ -1,4 +1,4 @@
-[gd_scene format=3 uid="uid://d2s4spgyxrfo5"]
+[gd_scene format=3 uid="uid://c5kdlwgpy88if"]
 
 [ext_resource type="Script" uid="uid://d4nrt4vfygycd" path="res://Scripts/game.gd" id="1_j5yw3"]
 [ext_resource type="Texture2D" uid="uid://c666w0rslfkwy" path="res://Images and ressources/Images/circuit_image.png" id="2_kldst"]
